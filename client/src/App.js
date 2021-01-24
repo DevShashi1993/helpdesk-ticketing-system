@@ -1,121 +1,59 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React from 'react';
+// import './App.css';
+import Dashboard from './components/Dashboard/Dashboard';
+// import Header from './components/Layout/Header';
+import Navbar from './components/Navbar/Navbar';
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Provider } from 'react-redux';
+import store from './store';
+import Landing from './components/Landing/Landing';
+import Register from './components/Register/Register';
+import Login from './components//Login/Login';
+// import jwt_decode from 'jwt-decode';
+// import setJWTToken from './securityUtils/setJWTToken';
+// import { SET_CURRENT_USER } from './actions/types';
+// import { logout } from './actions/securityActions';
+import SecuredRoute from "./securityUtils/SecureRoute";
 
-import "react-toastify/dist/ReactToastify.css";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  Redirect
-} from "react-router-dom";
+const jwtToken = localStorage.jwtToken
 
-import { toast } from "react-toastify";
+// if (jwtToken) {
+//   setJWTToken(jwtToken);
 
-//components
+//   const decoded_jwtToken = jwt_decode(jwtToken);
+//   store.dispatch({
+//     type: SET_CURRENT_USER,
+//     payload: decoded_jwtToken
+//   });
 
-import Login from "./components/Login";
-import Register from "./components/Register";
-import Dashboard from "./components/dashboard/Dashboard";
-import DashboardNew from "./components/dashboard/DashboardNew";
-import Landing from "./components/Landing";
-import Navbar from "./components/navbar/navbar";
+//   const currentTime = Date.now() / 1000;
 
-toast.configure();
+//   if (decoded_jwtToken.exp < currentTime) {
+//     store.dispatch(logout())
+//     window.location.href = "/";
+//   }
+// }
 
-function App() {
-  const checkAuthenticated = async () => {
-    try {
-      const res = await fetch("http://localhost:5000/authentication/verify", {
-        method: "POST",
-        headers: { jwt_token: localStorage.token }
-      });
 
-      const parseRes = await res.json();
 
-      parseRes === true ? setIsAuthenticated(true) : setIsAuthenticated(false);
-    } catch (err) {
-      console.error('checkAuthenticated error: ', err.message);
-    }
-  };
-
-  useEffect(() => {
-    checkAuthenticated();
-  }, []);
-
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  const setAuth = boolean => {
-    setIsAuthenticated(boolean);
-  };
-
+const App = () => {
   return (
-    <Fragment>
+    <Provider store={store}>
       <Router>
-        <Navbar/>
+        <Navbar />
         <div className="container-fluid">
-          {/* {!isAuthenticated ?
-            <Switch>
-              <Route exact path="/" component={Landing} />
-              <Route exact path="/login" component={Login} />
-              <Route exact path="/register" component={Register} />
-              <Route exact path="/dashboard" component={Login} />
-            </Switch> :
-            <Switch>
-              <Route exact path="/" render={() =><Redirect to="/dashboard" /> } />
-              <Route exact path="/login" render={() =><Redirect to="/dashboard" />} />
-              <Route exact path="/register" render={() =><Redirect to="/dashboard" /> } />
-              <Route exact path="/dashboard" render={() => <Dashboard setAuth={() => setAuth()}  />}/>
-            </Switch>
-          } */}
-            
-          <Switch>
-            <Route
-              exact
-              path="/"
-              render={props =>
-                !isAuthenticated ? (
-                  <Landing {...props} />
-                ) : (
-                  <Redirect to="/dashboard" />
-                )
-              }
-            />
-            <Route
-              exact
-              path="/login"
-              render={props =>
-                !isAuthenticated ? (
-                  <Login {...props} setAuth={setAuth} />
-                ) : (
-                  <Redirect to="/dashboard" />
-                )
-              }
-            />
-            <Route
-              exact
-              path="/register"
-              render={props =>
-                !isAuthenticated ? (
-                  <Register {...props} setAuth={setAuth} />
-                ) : (
-                  <Redirect to="/dashboard" />
-                )
-              }
-            />
-            <Route
-              exact
-              path="/dashboard"
-              render={props =>
-                isAuthenticated ? (
-                  <DashboardNew {...props} setAuth={setAuth} />
-                ) : (
-                  <Redirect to="/login" />
-                )
-              }
-            />
-          </Switch>
+        
+          <Route exact path="/" component={Landing} />
+          <Route exact path="/register" component={Register} />
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/dashboard" component={Dashboard} />
+
+          {/* <Switch>
+            <SecuredRoute exact path="/dashboard" component={Dashboard} />
+          </Switch> */}
         </div>
       </Router>
-    </Fragment>
+    </Provider>
   );
 }
 
