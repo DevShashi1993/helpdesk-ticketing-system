@@ -1,60 +1,62 @@
-import React from 'react';
-// import './App.css';
-import Dashboard from './components/Dashboard/Dashboard';
-// import Header from './components/Layout/Header';
-import Navbar from './components/Navbar/Navbar';
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { Provider } from 'react-redux';
-import store from './store';
-import Landing from './components/Landing/Landing';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import React, {useState} from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, Switch, useRoutes } from "react-router-dom";
+import { ThemeProvider, makeStyles } from '@material-ui/core';
+import GlobalStyles from 'src/components/GlobalStyles';
+import AccountView from 'src/views/account/AccountView';
+import DashboardView from './views/reports/DashboardView';
+import NotFoundView from 'src/views/errors/NotFoundView';
+import ProductListView from 'src/views/product/ProductListView';
+import SettingsView from 'src/views/settings/SettingsView';
 import Register from './components/Register/Register';
 import Login from './components//Login/Login';
-// import jwt_decode from 'jwt-decode';
-// import setJWTToken from './securityUtils/setJWTToken';
-// import { SET_CURRENT_USER } from './actions/types';
-// import { logout } from './actions/securityActions';
-import SecuredRoute from "./securityUtils/SecureRoute";
+import AppLayout from './AppLayout';
+import 'src/mixins/chartjs';
+import theme from 'src/theme';
+import routes from 'src/routes';
+import CustomerListView from './views/customer/CustomerListView';
 
-const jwtToken = localStorage.jwtToken
-
-// if (jwtToken) {
-//   setJWTToken(jwtToken);
-
-//   const decoded_jwtToken = jwt_decode(jwtToken);
-//   store.dispatch({
-//     type: SET_CURRENT_USER,
-//     payload: decoded_jwtToken
-//   });
-
-//   const currentTime = Date.now() / 1000;
-
-//   if (decoded_jwtToken.exp < currentTime) {
-//     store.dispatch(logout())
-//     window.location.href = "/";
-//   }
-// }
-
-
+const useStyles = makeStyles((theme) => ({
+  root: {
+    backgroundColor: theme.palette.background.default,
+    display: 'flex',
+    height: '100%',
+    overflow: 'hidden',
+    width: '100%'
+  }
+}));
 
 const App = () => {
-  return (
-    <Provider store={store}>
-      <Router>
-        <Navbar />
-        <div className="container-fluid">
-        
-          <Route exact path="/" component={Landing} />
-          <Route exact path="/register" component={Register} />
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/dashboard" component={Dashboard} />
+  // const routing = useRoutes(routes);
+  const classes = useStyles();
+  const [isMobileNavOpen, setMobileNavOpen] = useState(false);
+  const [isAuth, setIsAuth] = useState(false);
 
-          {/* <Switch>
-            <SecuredRoute exact path="/dashboard" component={Dashboard} />
-          </Switch> */}
-        </div>
+  return (
+    <ThemeProvider theme={theme}>
+      <GlobalStyles />
+      {/* {routing} */}
+      <Router>
+          <Routes>
+            <Route path="/" element={<AppLayout isDashboardLayout={false}/>}>
+              <Route path="/" element={<Navigate to="/app/dashboard" />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<Login />} />
+            </Route>
+
+            <Route path="/app" element={<AppLayout isDashboardLayout/>}>
+              <Route path="/dashboard" element={<DashboardView />} />
+              <Route path="/assignments" element={<CustomerListView />} />
+              <Route path="/account" element={<AccountView />} />
+              <Route path="/bookmarks" element={<ProductListView />} />
+              <Route path="/setting" element={<SettingsView/>} />
+            </Route>
+
+            <Route path="*" element={<NotFoundView />} />
+          </Routes>
       </Router>
-    </Provider>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;

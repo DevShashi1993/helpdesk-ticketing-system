@@ -1,33 +1,83 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { Container } from "reactstrap";
-// import NavigationBar from "./components/NavigationBar/NavigationBar";
-import LoginPage from "./pages/LoginPage";
-import HomePage from "./pages/HomePage";
-import Signup from "./pages/Signup";
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import React, { useState } from 'react';
+import { Outlet } from "react-router-dom";
+import { makeStyles } from '@material-ui/core';
+import NavBar from './components/Navbar/Navbar';
+import Sidebar from './components/Sidebar';
+import 'src/mixins/chartjs';
+import theme from 'src/theme';
+import routes from 'src/routes';
 
-const AppLayout = () => {
+const useStyles = makeStyles((theme) => ({
+  root: {
+    backgroundColor: theme.palette.background.dark,
+    display: 'flex',
+    height: '100%',
+    overflow: 'hidden',
+    width: '100%'
+  },
+  wrapper: {
+    display: 'flex',
+    flex: '1 1 auto',
+    overflow: 'hidden',
+    paddingTop: 64,
+  },
+  wrapperWithLeftPadding: {
+    display: 'flex',
+    flex: '1 1 auto',
+    overflow: 'hidden',
+    paddingTop: 64,
+    [theme.breakpoints.up('lg')]: {
+      paddingLeft: 256
+    }
+  },
+  contentContainer: {
+    display: 'flex',
+    flex: '1 1 auto',
+    overflow: 'hidden'
+  },
+  content: {
+    flex: '1 1 auto',
+    height: '100%',
+    overflow: 'auto'
+  }
+}));
+
+const AppLayout = ({ isDashboardLayout }) => {
+  const classes = useStyles();
+  const [isMobileNavOpen, setMobileNavOpen] = useState(false);
+  console.log("isDashboardLayout", isDashboardLayout);
+
+  const dashboardLayout = (<>
+    <NavBar onMobileNavOpen={() => setMobileNavOpen(true)} />
+    <Sidebar
+      onMobileClose={() => setMobileNavOpen(false)}
+      openMobile={isMobileNavOpen}
+    />
+    <div className={classes.wrapperWithLeftPadding} >
+      <div className={classes.contentContainer}>
+        <div className={classes.content}>
+          <Outlet />
+        </div>
+      </div>
+    </div>
+  </>);
+
+  const mainLayout = (<>
+    <NavBar />
+    <div className={classes.wrapper}>
+      <div className={classes.contentContainer}>
+        <div className={classes.content}>
+          <Outlet />
+        </div>
+      </div>
+    </div>
+  </>);
+
   return (
-    <>
-      <header>
-        <Router>{/* <NavigationBar /> */}</Router>
-      </header>
-
-      <main>
-        <Container>
-          <Switch>
-            <Route exact path="/" component={HomePage} />
-            <Route path="/signup" component={Signup} />
-            <Route path="/login" component={LoginPage} />
-            <Route
-              render={function () {
-                return <h1>Not Found</h1>;
-              }}
-            />
-          </Switch>
-        </Container>
-      </main>
-    </>
+    <div className={classes.root}>
+      {isDashboardLayout ? dashboardLayout : mainLayout}
+    </div>
   );
 };
 

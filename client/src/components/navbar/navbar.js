@@ -1,22 +1,76 @@
-import React from 'react';
-import { } from 'react-redux';
+import React, { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import {
+  AppBar,
+  Badge,
+  Box,
+  Hidden,
+  IconButton,
+  Toolbar,
+  makeStyles
+} from '@material-ui/core';
+import MenuIcon from '@material-ui/icons/Menu';
+import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
+import InputIcon from '@material-ui/icons/Input';
+import Logo from 'src/components/Logo';
+import "./Navbar.css";
 
-const Navbar = () => {
-    return (
-        <header className="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-            <a className="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Helpdesk Ticketing System</a>
-            <button className="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-                <span className="navbar-toggler-icon"></span>
-            </button>
-            <input className="form-control form-control-dark w-100" type="text" placeholder="Search Tickets" aria-label="Search Tickets" />
-            
-            <ul className="navbar-nav px-3">
-                <li className="nav-item text-nowrap">
-                    <a className="nav-link" href="#">Sign out</a>
-                </li>
-            </ul>
-        </header>
-    );
+const useStyles = makeStyles(() => ({
+  root: {},
+  avatar: {
+    width: 60,
+    height: 60
   }
-  
-  export default Navbar;
+}));
+
+
+const Navbar = ({
+  className,
+  onMobileNavOpen,
+  ...rest
+}) => {
+  const classes = useStyles();
+  const [notifications] = useState([]);
+
+  return (
+    <AppBar
+      className={clsx(classes.root, className)}
+      elevation={0}
+      {...rest}
+    >
+      <Toolbar>
+      {/* <h3>HelpDesk</h3> */}
+        <RouterLink to="/">
+          <Logo />
+        </RouterLink>
+        <Box flexGrow={1} />
+        <Hidden mdDown>
+          <IconButton color="inherit">
+            <Badge
+              badgeContent={notifications.length}
+              color="primary"
+              variant="dot"
+            >
+              <NotificationsIcon />
+            </Badge>
+          </IconButton>
+          <IconButton color="inherit" href='/login'>
+            <InputIcon />
+          </IconButton>
+        </Hidden>
+        <Hidden lgUp>
+          <IconButton
+            color="inherit"
+            onClick={onMobileNavOpen}
+          >
+            <MenuIcon />
+          </IconButton>
+        </Hidden>
+      </Toolbar>
+    </AppBar>
+  );
+};
+
+export default Navbar;
