@@ -45,13 +45,13 @@ const TasksProgress = ({ className, ...rest }) => {
               gutterBottom
               variant="h6"
             >
-              TASKS PROGRESS
+              TICKETS IN-PROGRESS
             </Typography>
             <Typography
               color="textPrimary"
-              variant="h3"
+              variant="h1"
             >
-              75.5%
+              3
             </Typography>
           </Grid>
           <Grid item>

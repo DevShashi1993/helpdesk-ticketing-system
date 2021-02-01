@@ -1,7 +1,7 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
-import { Formik } from 'formik';
 import {
   Box,
   Button,
@@ -14,6 +14,8 @@ import {
   makeStyles
 } from '@material-ui/core';
 import Page from 'src/components/Page';
+import { createNewUser } from '../../store/actions/authActions';
+import { useFormik } from 'formik';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,7 +28,49 @@ const useStyles = makeStyles((theme) => ({
 
 const Register = () => {
   const classes = useStyles();
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const {
+    handleSubmit,
+    handleChange,
+    handleBlur,
+    values,
+    touched,
+    isSubmitting,
+    errors
+  } = useFormik({
+    initialValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: ''
+    },
+    validationSchema: Yup.object().shape({
+      email: Yup.string()
+        .email('Must be a valid email')
+        .max(255)
+        .required('Email is required'),
+      firstName: Yup.string()
+        .max(255)
+        .required('First name is required'),
+      lastName: Yup.string()
+        .max(255)
+        .required('Last name is required'),
+      password: Yup.string()
+        .max(255)
+        .required('password is required'),
+      policy: Yup.boolean().oneOf([true], 'This field must be checked')
+    }),
+    onSubmit: ({ firstName, lastName, email, password }) => {
+      dispatch(
+        createNewUser({
+          name: `${firstName} ${lastName}`,
+          email: email,
+          password: password,
+        })
+      );
+    }
+  });
 
   return (
     <Page
@@ -40,36 +84,6 @@ const Register = () => {
         justifyContent="center"
       >
         <Container maxWidth="sm">
-          <Formik
-            initialValues={{
-              email: '',
-              firstName: '',
-              lastName: '',
-              password: '',
-              policy: false
-            }}
-            validationSchema={
-              Yup.object().shape({
-                email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-                firstName: Yup.string().max(255).required('First name is required'),
-                lastName: Yup.string().max(255).required('Last name is required'),
-                password: Yup.string().max(255).required('password is required'),
-                policy: Yup.boolean().oneOf([true], 'This field must be checked')
-              })
-            }
-            onSubmit={() => {
-              navigate('/app/dashboard', { replace: true });
-            }}
-          >
-            {({
-              errors,
-              handleBlur,
-              handleChange,
-              handleSubmit,
-              isSubmitting,
-              touched,
-              values
-            }) => (
               <form onSubmit={handleSubmit}>
                 <Box mb={3}>
                   <Typography
@@ -171,7 +185,6 @@ const Register = () => {
                 <Box my={2}>
                   <Button
                     color="primary"
-                    disabled={isSubmitting}
                     fullWidth
                     size="large"
                     type="submit"
@@ -195,8 +208,6 @@ const Register = () => {
                   </Link>
                 </Typography>
               </form>
-            )}
-          </Formik>
         </Container>
       </Box>
     </Page>

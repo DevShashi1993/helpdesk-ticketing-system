@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import {
   Avatar,
+  Box,
   Card,
   CardContent,
   Grid,
@@ -10,9 +11,10 @@ import {
   makeStyles,
   colors
 } from '@material-ui/core';
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     height: '100%'
   },
@@ -20,6 +22,13 @@ const useStyles = makeStyles(() => ({
     backgroundColor: colors.indigo[600],
     height: 56,
     width: 56
+  },
+  differenceIcon: {
+    color: colors.red[900]
+  },
+  differenceValue: {
+    color: colors.red[900],
+    marginRight: theme.spacing(1)
   }
 }));
 
@@ -43,13 +52,13 @@ const TotalProfit = ({ className, ...rest }) => {
               gutterBottom
               variant="h6"
             >
-              TOTAL PROFIT
+              TICKETS COMPLETED
             </Typography>
             <Typography
               color="textPrimary"
-              variant="h3"
+              variant="h1"
             >
-              $23,200
+              23
             </Typography>
           </Grid>
           <Grid item>
@@ -58,6 +67,25 @@ const TotalProfit = ({ className, ...rest }) => {
             </Avatar>
           </Grid>
         </Grid>
+        <Box
+          mt={2}
+          display="flex"
+          alignItems="center"
+        >
+          <ArrowDownwardIcon className={classes.differenceIcon} />
+          <Typography
+            className={classes.differenceValue}
+            variant="body2"
+          >
+            5%
+          </Typography>
+          <Typography
+            color="textSecondary"
+            variant="caption"
+          >
+            Since last month
+          </Typography>
+        </Box>
       </CardContent>
     </Card>
   );

@@ -52,13 +52,13 @@ const TotalCustomers = ({ className, ...rest }) => {
               gutterBottom
               variant="h6"
             >
-              TOTAL CUSTOMERS
+              OPEN TICKETS
             </Typography>
             <Typography
               color="textPrimary"
-              variant="h3"
+              variant="h1"
             >
-              1,600
+              15
             </Typography>
           </Grid>
           <Grid item>

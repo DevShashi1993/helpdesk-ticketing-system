@@ -52,13 +52,13 @@ const Budget = ({ className, ...rest }) => {
               gutterBottom
               variant="h6"
             >
-              BUDGET
+              ASSIGNED TICKETS
             </Typography>
             <Typography
               color="textPrimary"
-              variant="h3"
+              variant="h1"
             >
-              $24,000
+              41
             </Typography>
           </Grid>
           <Grid item>

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from "react-redux";
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
@@ -12,20 +13,14 @@ import {
   Typography,
   makeStyles
 } from '@material-ui/core';
-import {
-  AlertCircle as AlertCircleIcon,
-  BarChart as BarChartIcon,
-  Lock as LockIcon,
-  ShoppingBag as ShoppingBagIcon,
-  User as UserIcon,
-  UserPlus as UserPlusIcon,
-} from 'react-feather';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import AssessmentIcon from '@material-ui/icons/Assessment';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import BookmarksIcon from '@material-ui/icons/Bookmarks';
 import SettingsIcon from '@material-ui/icons/Settings';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SideItems from './SideItems';
+import { logout } from '../../store/actions/authActions';
 // import "./Sidebar.css";
 
 const user = {
@@ -56,7 +51,7 @@ const items = [
     title: 'Account'
   },
   {
-    href: '/app/setting',
+    href: '/app/settings',
     icon: SettingsIcon,
     title: 'Settings'
   }
@@ -81,6 +76,8 @@ const useStyles = makeStyles(() => ({
 const Sidebar = ({ openMobile, onMobileClose, }) => {
   const classes = useStyles();
   const location = useLocation();
+  const dispatch = useDispatch();
+  // const { user,  validToken } = useSelector((state) => state.authState);
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
@@ -88,6 +85,11 @@ const Sidebar = ({ openMobile, onMobileClose, }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
+
+  const logoutHandler = () => {
+    dispatch(logout());
+    window.location.href = '/login';
+  };
 
   const content = (
     <Box
@@ -132,6 +134,12 @@ const Sidebar = ({ openMobile, onMobileClose, }) => {
               icon={item.icon}
             />
           ))}
+          {openMobile && <SideItems
+              href='/login'
+              title='Logout'
+              icon={ExitToAppIcon}
+              onClick={logoutHandler}
+            /> }
         </List>
       </Box>
       <Box flexGrow={1} />
