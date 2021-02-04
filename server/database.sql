@@ -2,26 +2,13 @@
 
 CREATE DATABASE hts;
 
-CREATE TABLE users(
-  user_id UUID DEFAULT uuid_generate_v4(),
-  user_name VARCHAR(255) NOT NULL,
-  user_email VARCHAR(255) NOT NULL UNIQUE,
-  user_password VARCHAR(255) NOT NULL,
-  PRIMARY KEY (user_id)
+CREATE TABLE IF NOT EXISTS users (
+   	user_id int GENERATED ALWAYS AS IDENTITY (START WITH 100000) PRIMARY KEY,
+	first_name VARCHAR ( 50 ) NOT NULL,
+	last_name VARCHAR ( 50 ) NOT NULL,
+	company_name VARCHAR ( 100 ) NOT NULL,
+	email VARCHAR ( 100 ) UNIQUE NOT NULL,
+	password VARCHAR ( 150 ) NOT NULL,
+	created_on TIMESTAMP NOT NULL,
+	last_login TIMESTAMP 
 );
-
-CREATE TABLE todos(
-  todo_id SERIAL,
-  user_id UUID,
-  description VARCHAR(255) NOT NULL,
-  PRIMARY KEY (todo_id),
-  FOREIGN KEY (user_id) REFERENCES users(user_id)
-);
-
---fake users data
-
-insert into users (user_name, user_email, user_password) values ('Jacob', 'jacob@gmail.com', 'kthl8822');
-
---fake todos data
-
-insert into todos (user_id, description) values ('60dc16dd-c7f1-4fde-827a-90c0e101555c', 'clean room');
