@@ -43,6 +43,7 @@ const Register = () => {
       firstName: '',
       lastName: '',
       email: '',
+      companyName: '',
       password: ''
     },
     validationSchema: Yup.object().shape({
@@ -58,14 +59,18 @@ const Register = () => {
         .required('Last name is required'),
       password: Yup.string()
         .max(255)
-        .required('password is required'),
-      policy: Yup.boolean().oneOf([true], 'This field must be checked')
+        .required('Password is required'),
+      companyName: Yup.string()
+        .max(255)
+        .required('Company Name is required'),
     }),
-    onSubmit: ({ firstName, lastName, email, password }) => {
+    onSubmit: ({ firstName, lastName, email, companyName, password }) => {
       dispatch(
         createNewUser({
-          name: `${firstName} ${lastName}`,
+          firstName: firstName,
+          lastName: lastName,
           email: email,
+          companyName: companyName,
           password: password,
         })
       );
@@ -138,6 +143,18 @@ const Register = () => {
                   variant="outlined"
                 />
                 <TextField
+                  error={Boolean(touched.companyName && errors.companyName)}
+                  fullWidth
+                  helperText={touched.companyName && errors.companyName}
+                  label="Company Name"
+                  margin="normal"
+                  name="companyName"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.companyName}
+                  variant="outlined"
+                />
+                <TextField
                   error={Boolean(touched.password && errors.password)}
                   fullWidth
                   helperText={touched.password && errors.password}
@@ -150,38 +167,6 @@ const Register = () => {
                   value={values.password}
                   variant="outlined"
                 />
-                <Box
-                  alignItems="center"
-                  display="flex"
-                  ml={-1}
-                >
-                  <Checkbox
-                    checked={values.policy}
-                    name="policy"
-                    onChange={handleChange}
-                  />
-                  <Typography
-                    color="textSecondary"
-                    variant="body1"
-                  >
-                    I have read the
-                    {' '}
-                    <Link
-                      color="primary"
-                      component={RouterLink}
-                      to="#"
-                      underline="always"
-                      variant="h6"
-                    >
-                      Terms and Conditions
-                    </Link>
-                  </Typography>
-                </Box>
-                {Boolean(touched.policy && errors.policy) && (
-                  <FormHelperText error>
-                    {errors.policy}
-                  </FormHelperText>
-                )}
                 <Box my={2}>
                   <Button
                     color="primary"
