@@ -19,15 +19,16 @@ import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import BookmarksIcon from '@material-ui/icons/Bookmarks';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import SideItems from './SideItems';
 import { logout } from '../../store/actions/authActions';
 // import "./Sidebar.css";
 
-const user = {
-  avatar: '/static/images/avatars/avatar_5.png',
-  jobTitle: 'Senior Web Developer',
-  name: 'Shashikant Sharma'
-};
+// const user = {
+//   avatar: '/static/images/avatars/avatar_5.png',
+//   jobTitle: 'Senior Web Developer',
+//   name: 'Shashikant Sharma'
+// };
 
 const items = [
   {
@@ -36,9 +37,14 @@ const items = [
     title: 'Dashboard'
   },
   {
-    href: '/app/assignments',
+    href: '/app/tickets',
     icon: ListAltIcon,
-    title: 'My Assignments'
+    title: 'Tickets'
+  },
+  {
+    href: '/app/contacts',
+    icon: PeopleAltIcon,
+    title: 'Contacts'
   },
   {
     href: '/app/bookmarks',
@@ -77,7 +83,7 @@ const Sidebar = ({ openMobile, onMobileClose, }) => {
   const classes = useStyles();
   const location = useLocation();
   const dispatch = useDispatch();
-  // const { user,  validToken } = useSelector((state) => state.authState);
+  const { user } = useSelector((state) => state.authState);
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
@@ -106,7 +112,7 @@ const Sidebar = ({ openMobile, onMobileClose, }) => {
         <Avatar
           className={classes.avatar}
           component={RouterLink}
-          src={user.avatar}
+          src={'/static/images/avatars/avatar_5.png'}
           to="/app/account"
         />
         <Typography
@@ -114,13 +120,13 @@ const Sidebar = ({ openMobile, onMobileClose, }) => {
           color="textPrimary"
           variant="h5"
         >
-          {user.name}
+          {user && `${user.firstName} ${user.lastName}`}
         </Typography>
         <Typography
           color="textSecondary"
           variant="body2"
         >
-          {user.jobTitle}
+          {'Senior Web Developer'}
         </Typography>
       </Box>
       <Divider />

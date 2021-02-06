@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   Container,
   Grid,
@@ -19,7 +20,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Account = () => {
   const classes = useStyles();
-
+  const { user } = useSelector((state) => state.authState);
+  
   return (
     <Page
       className={classes.root}
@@ -36,7 +38,7 @@ const Account = () => {
             md={6}
             xs={12}
           >
-            <Profile />
+            <Profile user={user}/>
           </Grid>
           <Grid
             item
@@ -44,7 +46,7 @@ const Account = () => {
             md={6}
             xs={12}
           >
-            <ProfileDetails />
+            <ProfileDetails user={user}/>
           </Grid>
         </Grid>
       </Container>

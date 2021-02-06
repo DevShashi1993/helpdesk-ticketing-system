@@ -36,17 +36,15 @@ const useStyles = makeStyles(() => ({
   root: {}
 }));
 
-const ProfileDetails = ({ className, ...rest }) => {
+const ProfileDetails = ({ user }) => {
   const classes = useStyles();
+  const {firstName, lastName, email} = user;
   const [values, setValues] = useState({
-    firstName: 'Shashikant',
-    lastName: 'Sharma',
-    email: 'shashikantsharma1993@gmail.com',
     phone: '',
     state: 'Maharashtra',
     country: 'India'
   });
-
+  
   const handleChange = (event) => {
     setValues({
       ...values,
@@ -58,8 +56,7 @@ const ProfileDetails = ({ className, ...rest }) => {
     <form
       autoComplete="off"
       noValidate
-      className={clsx(classes.root, className)}
-      {...rest}
+      className={clsx(classes.root)}
     >
       <Card>
         <CardHeader
@@ -84,7 +81,7 @@ const ProfileDetails = ({ className, ...rest }) => {
                 name="firstName"
                 onChange={handleChange}
                 required
-                value={values.firstName}
+                value={firstName}
                 variant="outlined"
               />
             </Grid>
@@ -99,7 +96,7 @@ const ProfileDetails = ({ className, ...rest }) => {
                 name="lastName"
                 onChange={handleChange}
                 required
-                value={values.lastName}
+                value={lastName}
                 variant="outlined"
               />
             </Grid>
@@ -114,7 +111,7 @@ const ProfileDetails = ({ className, ...rest }) => {
                 name="email"
                 onChange={handleChange}
                 required
-                value={values.email}
+                value={email}
                 variant="outlined"
               />
             </Grid>
@@ -192,10 +189,6 @@ const ProfileDetails = ({ className, ...rest }) => {
       </Card>
     </form>
   );
-};
-
-ProfileDetails.propTypes = {
-  className: PropTypes.string
 };
 
 export default ProfileDetails;

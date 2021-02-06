@@ -21,10 +21,17 @@ router.post("/register", validInfo, async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const bcryptPassword = await bcrypt.hash(password, salt);
 
-    let newUser = await pool.query(
-      "INSERT INTO users (first_name, last_name, email, company_name, password, created_on) VALUES ($1, $2, $3, $4, $5, current_timestamp) RETURNING *",
-      [firstName, lastName, email, companyName, bcryptPassword]
-    );
+    const insertQry = `WITH company_insert AS (INSERT INTO company(comp_name) VALUES('${companyName}') RETURNING comp_id)
+                      INSERT INTO users (first_name, last_name, company_id, email, password, created_on) VALUES
+                      ('${firstName}', '${lastName}',(SELECT comp_id FROM company_insert), '${email}', '${bcryptPassword}', current_timestamp)
+                      RETURNING user_id`;
+    console.log(insertQry);
+
+    let newUser = await pool.query(insertQry);
+
+    if (newUser.rows.length === 1) {
+      return res.status(200).send("User registred sucessfully");
+    }
 
     const jwtToken = jwtGenerator(newUser.rows[0].user_id);
 
@@ -37,7 +44,7 @@ router.post("/register", validInfo, async (req, res) => {
 
 router.post("/login", validInfo, async (req, res) => {
   const { email, password } = req.body;
-  console.log("recieved =>email ", email);
+  
   try {
     const user = await pool.query("SELECT * FROM users WHERE email = $1", [
       email
@@ -46,17 +53,19 @@ router.post("/login", validInfo, async (req, res) => {
     if (user.rows.length === 0) {
       return res.status(401).json("User does not exist");
     }
-
-    const validPassword = await bcrypt.compare(
-      password,
-      user.rows[0].password
-    );
-
-    if (!validPassword) {
-      return res.status(401).json("Invalid Credential");
+    else {
+      const validPassword = await bcrypt.compare(
+        password,
+        user.rows[0].password
+      );
+  
+      if (!validPassword) {
+        return res.status(401).json("Invalid Credential");
+      }
+      const jwtToken = jwtGenerator(user.rows[0].user_id);
+      const {first_name, last_name, email} = user.rows[0];
+      return res.json({ first_name, last_name, email, jwtToken });
     }
-    const jwtToken = jwtGenerator(user.rows[0].user_id);
-    return res.json({ jwtToken });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");

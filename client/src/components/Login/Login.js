@@ -40,11 +40,11 @@ const Login = () => {
   const dispatch = useDispatch();
   const { user, validToken, error } = useSelector(state => state.authState);
 
-  // useEffect(() => {
-  //     if (validToken) {
-  //       window.location.href = '/app/dashboard';
-  //     }
-  // },[validToken]);
+  useEffect(() => {
+      if (validToken) {
+        window.location.href = '/app/dashboard';
+      }
+  },[validToken]);
   console.log('Auth error=>', error);
 
   const [state, setState] = React.useState({

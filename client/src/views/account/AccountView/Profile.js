@@ -14,7 +14,7 @@ import {
   makeStyles
 } from '@material-ui/core';
 
-const user = {
+const userData = {
   avatar: '/static/images/avatars/avatar_5.png',
   city: 'Mumbai',
   country: 'India',
@@ -31,13 +31,12 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const Profile = ({ className, ...rest }) => {
+const Profile = ({ user }) => {
   const classes = useStyles();
-
+  const {firstName, lastName} = user;
   return (
     <Card
-      className={clsx(classes.root, className)}
-      {...rest}
+      className={clsx(classes.root)}
     >
       <CardContent>
         <Box
@@ -47,27 +46,27 @@ const Profile = ({ className, ...rest }) => {
         >
           <Avatar
             className={classes.avatar}
-            src={user.avatar}
+            src={userData.avatar}
           />
           <Typography
             color="textPrimary"
             gutterBottom
             variant="h3"
           >
-            {user.name}
+            {`${firstName} ${lastName}`}
           </Typography>
           <Typography
             color="textSecondary"
             variant="body1"
           >
-            {`${user.city} ${user.country}`}
+            {`${userData.city} ${userData.country}`}
           </Typography>
           <Typography
             className={classes.dateText}
             color="textSecondary"
             variant="body1"
           >
-            {`${moment().format('hh:mm A')} ${user.timezone}`}
+            {`${moment().format('hh:mm A')} ${userData.timezone}`}
           </Typography>
         </Box>
       </CardContent>
@@ -85,8 +84,5 @@ const Profile = ({ className, ...rest }) => {
   );
 };
 
-Profile.propTypes = {
-  className: PropTypes.string
-};
 
 export default Profile;

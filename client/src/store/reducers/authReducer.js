@@ -1,7 +1,12 @@
 import { SET_CURRENT_USER, GET_ERRORS } from '../actions/types'
 
 const initialSate = {
-    user: {},
+    user: {
+        firstName: '',
+        lastName: '',
+        email: '',
+        companyName: '',
+    },
     validToken: false,
     error : null
 };
@@ -19,8 +24,8 @@ export default function (state = initialSate, action) {
         case SET_CURRENT_USER:
             return {
                 ...state,
-                validToken: booleanActionPayload(action.payload),
-                user: action.payload
+                validToken: action.payload.decoded_jwtToken ? true : false,
+                user: action.payload.userData
             };
         case GET_ERRORS:
             return {

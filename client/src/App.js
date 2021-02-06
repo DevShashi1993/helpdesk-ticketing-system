@@ -23,7 +23,8 @@ import AppLayout from './AppLayout';
 import 'src/mixins/chartjs';
 import theme from 'src/theme';
 import routes from 'src/routes';
-import CustomerListView from './views/customer/CustomerListView';
+import TicketsView from './views/tickets/TicketsView';
+import ContactListView from './views/customer/ContactListView';
 import setJWTToken from './utilities/setJWTToken';
 import { SET_CURRENT_USER } from './store/actions/types';
 import { logout } from './store/actions/authActions';
@@ -47,20 +48,23 @@ const App = () => {
   const classes = useStyles();
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
   const [isAuth, setIsAuth] = useState(false);
-  const { user, validToken } = useSelector(state => state.authState);
-
+  const { validToken } = useSelector(state => state.authState);
+  console.log("validToken", validToken);
   useEffect(() => {
     if (jwtToken) {
+      const userData = JSON.parse(localStorage.htsUser);
+      console.log("userData ls=>", userData);
       setJWTToken(jwtToken);
       const decoded_jwtToken = jwt_decode(jwtToken);
       dispatch({
         type: SET_CURRENT_USER,
-        payload: decoded_jwtToken
+        payload: { userData, decoded_jwtToken }
       });
 
       const currentTime = Date.now() / 1000;
 
       if (decoded_jwtToken.exp < currentTime) {
+        
         dispatch(logout());
         window.location.href = '/login';
       }
@@ -101,7 +105,8 @@ const App = () => {
             }
           >
             <Route path="/dashboard" element={<DashboardView />} />
-            <Route path="/assignments" element={<CustomerListView />} />
+            <Route path="/tickets" element={<TicketsView />} />
+            <Route path="/contacts" element={<ContactListView />} />
             <Route path="/account" element={<AccountView />} />
             <Route path="/bookmarks" element={<ProductListView />} />
             <Route path="/settings" element={<SettingsView />} />
