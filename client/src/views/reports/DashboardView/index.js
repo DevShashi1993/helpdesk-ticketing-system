@@ -14,7 +14,6 @@ import TasksProgress from './TasksProgress';
 import TotalCustomers from './TotalCustomers';
 import TotalProfit from './TotalProfit';
 import TicketByCategory from './TicketByCategory';
-import AddIcon from '@material-ui/icons/Add';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,16 +23,6 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(3)
   }
 }));
-
-const floatingBtn = {
-  position: 'absolute',
-  width : '100px',
-  height : '100px',
-  borderRadius : '50%',
-  top: '80%',
-  right: '5%',
-  zIndex: '1000'
-};
 
 const Dashboard = () => {
   const classes = useStyles();
@@ -48,9 +37,6 @@ const Dashboard = () => {
           container
           spacing={3}
         >
-          <Button style={floatingBtn} variant="contained" color="primary">
-          <AddIcon style={{ fontSize: 50 }} />
-        </Button>
           <Grid
             item
             lg={3}
