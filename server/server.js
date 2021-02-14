@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: false }));
 
 //routes
 app.use("/authentication", require("./routes/jwtAuth"));
-app.use("/dashboard", require("./routes/dashboard"));
+app.use("/ticket", require("./routes/ticket"));
 
 app.listen(5000, () => {
   console.log(`Server is starting on port 5000`);

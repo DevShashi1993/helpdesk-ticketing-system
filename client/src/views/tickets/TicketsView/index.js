@@ -17,16 +17,25 @@ const useStyles = makeStyles(theme => ({
 
 const floatingBtn = {
   position: 'absolute',
-  width : '80px',
-  height : '80px',
-  borderRadius : '50%',
-  top: '80%',
+  // width : '80px',
+  // height : '80px',
+  // borderRadius : '50%',
+  top: '85%',
   right: '5%',
   zIndex: '1000'
 };
 
 const TicketsView = () => {
   const classes = useStyles();
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <Page className={classes.root} title="Tickets">
@@ -34,8 +43,8 @@ const TicketsView = () => {
         <Box mt={3}>
           <h1>This is Ticket page</h1>
           <Tickets />
-          <TicketModal/>
-          <Fab color="primary" aria-label="add">
+          <TicketModal isOpen={open} handleClose={handleClose}/>
+          <Fab color="primary" aria-label="add" style={floatingBtn} onClick={handleClickOpen} >
             <AddIcon />
           </Fab>
         </Box>

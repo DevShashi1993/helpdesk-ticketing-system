@@ -49,11 +49,9 @@ const App = () => {
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
   const [isAuth, setIsAuth] = useState(false);
   const { validToken } = useSelector(state => state.authState);
-  console.log("validToken", validToken);
   useEffect(() => {
     if (jwtToken) {
       const userData = JSON.parse(localStorage.htsUser);
-      console.log("userData ls=>", userData);
       setJWTToken(jwtToken);
       const decoded_jwtToken = jwt_decode(jwtToken);
       dispatch({

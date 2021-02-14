@@ -46,7 +46,6 @@ export const login = LoginRequest => async dispatch => {
       payload: { userData, decoded_jwtToken }
     });
   } catch (error) {
-    //console.log("error=>", error);
     dispatch({
       type: GET_ERRORS,
       payload: error.response.data

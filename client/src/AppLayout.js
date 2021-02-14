@@ -46,7 +46,6 @@ const useStyles = makeStyles((theme) => ({
 const AppLayout = ({ isDashboardLayout }) => {
   const classes = useStyles();
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
-  console.log("isDashboardLayout", isDashboardLayout);
 
   const dashboardLayout = (<>
     <NavBar onMobileNavOpen={() => setMobileNavOpen(true)} />

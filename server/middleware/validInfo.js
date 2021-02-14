@@ -11,10 +11,6 @@ module.exports = function (req, res, next) {
   }
 
   if (req.path === "/register") {
-    console.log(firstName);
-    console.log(lastName);
-    console.log(companyName);
-    console.log(email);
     if (![firstName,
       lastName,
       email,

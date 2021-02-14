@@ -45,7 +45,6 @@ const Login = () => {
         window.location.href = '/app/dashboard';
       }
   },[validToken]);
-  console.log('Auth error=>', error);
 
   const [state, setState] = React.useState({
     open: false,
