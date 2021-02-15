@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS ticket_priority (
 	name VARCHAR ( 50 ) NOT NULL
 )
 
-
+---DATE should be in 'yyyy-mm-dd' format
 CREATE TABLE IF NOT EXISTS tickets (
    	id INT GENERATED ALWAYS AS IDENTITY (START WITH 100001) PRIMARY KEY,
 	ticket_title VARCHAR ( 50 ) NOT NULL,
@@ -46,7 +46,8 @@ CREATE TABLE IF NOT EXISTS tickets (
 	priority_id INT NOT NULL,
 	created_by INT NOT NULL,
 	assigned_to INT NOT NULL,
-	tags VARCHAR ( 100 ) NOT NULL,
+	due_date DATE NOT NULL,
+	tags VARCHAR ( 100 ),
 	created_on TIMESTAMP NOT NULL,
 	CONSTRAINT fk_tickets_ticket_type FOREIGN KEY(type_id) REFERENCES ticket_type(id),
 	CONSTRAINT fk_tickets_ticket_status FOREIGN KEY(status_id) REFERENCES ticket_status(id),

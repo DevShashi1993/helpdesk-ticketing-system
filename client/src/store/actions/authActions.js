@@ -25,8 +25,9 @@ export const login = LoginRequest => async dispatch => {
       'http://localhost:5000/authentication/login',
       LoginRequest
     );
-    const { first_name, last_name, email, jwtToken } = await res.data;
-    const userData = {
+    const { user_id, first_name, last_name, email, jwtToken } = await res.data;
+    let userData = {
+      userID: user_id,
       firstName: first_name,
       lastName: last_name,
       email: email
@@ -40,10 +41,10 @@ export const login = LoginRequest => async dispatch => {
     setJWTToken(jwtToken);
 
     const decoded_jwtToken = jwt_decode(jwtToken);
-
+    
     dispatch({
       type: SET_CURRENT_USER,
-      payload: { userData, decoded_jwtToken }
+      payload: {userData , decoded_jwtToken }
     });
   } catch (error) {
     dispatch({

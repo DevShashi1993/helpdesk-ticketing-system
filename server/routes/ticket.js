@@ -20,18 +20,20 @@ router.get("/all", authorize, async (req, res) => {
 
 //create a ticket, using authorize middleware
 router.post("/new", authorize, async (req, res) => {
-  console.log(req.body);
-  // try {
-  //   const { description } = req.body;
-  //   const newticket = await pool.query(
-  //     "INSERT INTO ticket (user_id, description) VALUES ($1, $2) RETURNING *",
-  //     [req.user.id, description]
-  //   );
+  try {
+    const { assignTo, createdBy, dueDate, ticketDesc, ticketPriority, ticketTitle, ticketType } = req.body;
+    const ticketInsertQuery = `INSERT INTO tickets(
+      ticket_title, ticket_desc, type_id, status_id, priority_id, created_by, assigned_to, due_date, created_on)
+      VALUES ('${ticketTitle}', '${ticketDesc}', ${ticketType}, 101, ${ticketPriority}, ${createdBy}, ${assignTo}, '${dueDate}', current_timestamp) RETURNING *`;
 
-  //   res.json(newticket.rows[0]);
-  // } catch (err) {
-  //   console.error(err.message);
-  // }
+      const newticket = await pool.query(ticketInsertQuery);
+
+    if (newticket.rows.length === 1) {
+      return res.status(200).send("Ticket created sucessfully");
+    }
+  } catch (err) {
+    console.error(err.message);
+  }
 });
 
 //update a ticket

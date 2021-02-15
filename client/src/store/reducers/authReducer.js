@@ -2,6 +2,7 @@ import { SET_CURRENT_USER, GET_ERRORS } from '../actions/types'
 
 const initialSate = {
     user: {
+        userID: '',
         firstName: '',
         lastName: '',
         email: '',

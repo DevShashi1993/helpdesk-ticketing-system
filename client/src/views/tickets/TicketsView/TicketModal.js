@@ -1,23 +1,8 @@
 import React, {useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  Box,
   Button,
-  Checkbox,
-  Container,
-  FormControl,
-  InputLabel,
-  FormHelperText,
-  Link,
   TextField,
-  Typography,
-  MenuItem,
-  Select,
-  makeStyles,
-  Card,
-  CardContent,
-  CardHeader,
-  Divider,
   Grid
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
@@ -79,31 +64,35 @@ const ticketPriority = [
 
 const assignTo = [
   {
-    value: '1',
+    value: '100001',
     label: 'Shashikant Sharma'
   },
   {
-    value: '2',
+    value: '100001',
     label: 'Jeff Luman'
   },
   {
-    value: '3',
+    value: '100001',
     label: 'Mike Lyda'
   },
   {
-    value: '4',
+    value: '100001',
     label: 'Phil Ball'
   }
 ];
 
 export default function TicketModal({ isOpen, handleClose }) {
+  const { user } = useSelector(state => state.authState);
+
   const dispatch = useDispatch();
   const [values, setValues] = useState({
     ticketTitle: '',
     ticketDesc: '',
     ticketType: '',
     ticketPriority: '',
-    assignTo: ''
+    dueDate: '',
+    assignTo: '',
+    createdBy: user.userID
   });
 
   const handleChange = event => {
@@ -113,7 +102,7 @@ export default function TicketModal({ isOpen, handleClose }) {
     });
   };
 
-  const handleSubmit = ({ticketTitle, ticketDesc, ticketType, ticketPriority, assignTo}) => {
+  const handleSubmit = ({ticketTitle, ticketDesc, ticketType, ticketPriority, dueDate, assignTo}) => {
     console.log('submit called');
     dispatch(
       createNewTicket({
@@ -121,7 +110,9 @@ export default function TicketModal({ isOpen, handleClose }) {
         ticketDesc,
         ticketType,
         ticketPriority,
-        assignTo
+        dueDate,
+        assignTo,
+        createdBy: user.userID
       })
     );
   };
@@ -208,6 +199,21 @@ export default function TicketModal({ isOpen, handleClose }) {
                   </option>
                 ))}
               </TextField>
+            </Grid>
+            <Grid item md={6} xs={12}>
+              <TextField
+                fullWidth
+                label="Due Date"
+                name="dueDate"
+                type="date"
+                onChange={handleChange}
+                InputLabelProps={{
+                  shrink: true
+                }}
+                required
+                value={values.dueDate}
+                variant="outlined"
+              />
             </Grid>
             <Grid item md={6} xs={12}>
               <TextField
