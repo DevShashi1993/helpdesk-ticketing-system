@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from 'react-redux';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
@@ -79,11 +79,11 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const Sidebar = ({ openMobile, onMobileClose, }) => {
+const Sidebar = ({ openMobile, onMobileClose }) => {
   const classes = useStyles();
   const location = useLocation();
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.authState);
+  const { user } = useSelector(state => state.authState);
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
@@ -98,41 +98,25 @@ const Sidebar = ({ openMobile, onMobileClose, }) => {
   };
 
   const content = (
-    <Box
-      height="100%"
-      display="flex"
-      flexDirection="column"
-    >
-      <Box
-        alignItems="center"
-        display="flex"
-        flexDirection="column"
-        p={2}
-      >
+    <Box height="100%" display="flex" flexDirection="column">
+      <Box alignItems="center" display="flex" flexDirection="column" p={2}>
         <Avatar
           className={classes.avatar}
           component={RouterLink}
           src={'/static/images/avatars/avatar_5.png'}
           to="/app/account"
         />
-        <Typography
-          className={classes.name}
-          color="textPrimary"
-          variant="h5"
-        >
+        <Typography className={classes.name} color="textPrimary" variant="h5">
           {user && `${user.firstName} ${user.lastName}`}
         </Typography>
-        <Typography
-          color="textSecondary"
-          variant="body2"
-        >
+        <Typography color="textSecondary" variant="body2">
           {'Senior Web Developer'}
         </Typography>
       </Box>
       <Divider />
       <Box p={2}>
         <List>
-          {items.map((item) => (
+          {items.map(item => (
             <SideItems
               href={item.href}
               key={item.title}
@@ -140,12 +124,14 @@ const Sidebar = ({ openMobile, onMobileClose, }) => {
               icon={item.icon}
             />
           ))}
-          {openMobile && <SideItems
-              href='/login'
-              title='Logout'
+          {openMobile && (
+            <SideItems
+              href="/login"
+              title="Logout"
               icon={ExitToAppIcon}
               onClick={logoutHandler}
-            /> }
+            />
+          )}
         </List>
       </Box>
       <Box flexGrow={1} />
@@ -185,7 +171,7 @@ Sidebar.propTypes = {
 };
 
 Sidebar.defaultProps = {
-  onMobileClose: () => { },
+  onMobileClose: () => {},
   openMobile: false
 };
 

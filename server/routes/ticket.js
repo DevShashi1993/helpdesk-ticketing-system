@@ -25,11 +25,14 @@ router.post("/new", authorize, async (req, res) => {
     const ticketInsertQuery = `INSERT INTO tickets(
       ticket_title, ticket_desc, type_id, status_id, priority_id, created_by, assigned_to, due_date, created_on)
       VALUES ('${ticketTitle}', '${ticketDesc}', ${ticketType}, 101, ${ticketPriority}, ${createdBy}, ${assignTo}, '${dueDate}', current_timestamp) RETURNING *`;
-
+      console.log("something went wrong", ticketInsertQuery);
       const newticket = await pool.query(ticketInsertQuery);
 
     if (newticket.rows.length === 1) {
       return res.status(200).send("Ticket created sucessfully");
+    }
+    else {
+      console.log("something went wrong", ticketInsertQuery);
     }
   } catch (err) {
     console.error(err.message);

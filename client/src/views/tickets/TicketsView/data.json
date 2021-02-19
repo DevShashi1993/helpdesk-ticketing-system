@@ -1,0 +1,34 @@
+[
+  {
+    "ticketID": "10001",
+    "ticketTitle": "Sql error on page bulk create?",
+    "tickeType": "Defect",
+    "tickePriority": "Urgent",
+    "tickeDueDate": "26-02-2021",
+    "tickeStatus": "Done"
+  },
+  {
+    "ticketID": "10002",
+    "ticketTitle": "Translation support for Sapnish Language",
+    "tickeType": "New Feature",
+    "tickePriority": "High",
+    "tickeDueDate": "28-02-2021",
+    "tickeStatus": "In-Progress"
+  },
+  {
+    "ticketID": "10003",
+    "ticketTitle": "Text overlapping on Modal in Mobile View",
+    "tickeType": "Defect",
+    "tickePriority": "High",
+    "tickeDueDate": "03-03-2021",
+    "tickeStatus": "Open"
+  },
+  {
+    "ticketID": "10004",
+    "ticketTitle": "Automatic database backup mechnism",
+    "tickeType": "Research",
+    "tickePriority": "Low",
+    "tickeDueDate": "06-03-2021",
+    "tickeStatus": "Open"
+  }
+]

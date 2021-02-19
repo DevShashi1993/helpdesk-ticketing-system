@@ -5,7 +5,7 @@ import jwt_decode from 'jwt-decode';
 
 export const createNewUser = newUser => async dispatch => {
   try {
-    await axios.post('http://localhost:5000/authentication/register', newUser);
+    await axios.post('/authentication/register', newUser);
     window.location.href = '/login';
     dispatch({
       type: GET_ERRORS,
@@ -21,10 +21,7 @@ export const createNewUser = newUser => async dispatch => {
 
 export const login = LoginRequest => async dispatch => {
   try {
-    const res = await axios.post(
-      'http://localhost:5000/authentication/login',
-      LoginRequest
-    );
+    const res = await axios.post('/authentication/login', LoginRequest);
     const { user_id, first_name, last_name, email, jwtToken } = await res.data;
     let userData = {
       userID: user_id,
@@ -41,10 +38,10 @@ export const login = LoginRequest => async dispatch => {
     setJWTToken(jwtToken);
 
     const decoded_jwtToken = jwt_decode(jwtToken);
-    
+
     dispatch({
       type: SET_CURRENT_USER,
-      payload: {userData , decoded_jwtToken }
+      payload: { userData, decoded_jwtToken }
     });
   } catch (error) {
     dispatch({

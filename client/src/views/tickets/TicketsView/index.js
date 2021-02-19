@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { Button, Box, Container, Typography, makeStyles } from '@material-ui/core';
+import {
+  Button,
+  Box,
+  Container,
+  Typography,
+  makeStyles
+} from '@material-ui/core';
 import Page from 'src/components/Page';
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
@@ -11,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.dark,
     minHeight: '100%',
     paddingBottom: theme.spacing(3),
-    paddingTop: theme.spacing(3),
+    paddingTop: theme.spacing(3)
   }
 }));
 
@@ -38,25 +44,23 @@ const TicketsView = () => {
   };
 
   return (
-    <Page className={classes.root} title="Tickets">
-      <Container maxWidth={false}>
-        <Box mt={3}>
-          <Typography color="textPrimary" variant="h2">
-            All Tickets
-          </Typography>
-          <Tickets />
-          <TicketModal isOpen={open} handleClose={handleClose} />
-          <Fab
-            color="primary"
-            aria-label="add"
-            style={floatingBtn}
-            onClick={handleClickOpen}
-          >
-            <AddIcon />
-          </Fab>
-        </Box>
-      </Container>
-    </Page>
+    <Container className={classes.root} maxWidth={false}>
+      <Box mt={3}>
+        <Typography color="textPrimary" variant="h2">
+          All Tickets
+        </Typography>
+        <Tickets />
+        <TicketModal isOpen={open} handleClose={handleClose} />
+        <Fab
+          color="primary"
+          aria-label="add"
+          style={floatingBtn}
+          onClick={handleClickOpen}
+        >
+          <AddIcon />
+        </Fab>
+      </Box>
+    </Container>
   );
 };
 

@@ -30,12 +30,15 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
     "@material-ui/styles": "^4.10.0",
+    "axios": "^0.21.1",
     "chart.js": "^2.9.4",
     "clsx": "^1.1.1",
     "formik": "^2.1.5",
     "history": "^5.0.0",
+    "jwt-decode": "^3.1.2",
     "lodash": "^4.17.19",
     "moment": "^2.27.0",
+    "namor": "^2.0.2",
     "nprogress": "^0.2.0",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
@@ -44,9 +47,12 @@
     "react-feather": "^2.0.8",
     "react-helmet": "^6.1.0",
     "react-perfect-scrollbar": "^1.5.8",
+    "react-redux": "^7.2.2",
     "react-router": "^6.0.0-beta.0",
     "react-router-dom": "^6.0.0-beta.0",
     "react-scripts": "^4.0.0",
+    "react-table": "^7.6.3",
+    "redux-thunk": "^2.3.0",
     "uuid": "^8.3.0",
     "yup": "^0.29.3"
   },
@@ -60,5 +66,6 @@
     "eslint-plugin-react": "^7.20.3",
     "eslint-plugin-react-hooks": "^4.0.8",
     "prettier": "^1.19.1"
-  }
+  },
+  "proxy": "http://192.168.0.110:5000"
 }

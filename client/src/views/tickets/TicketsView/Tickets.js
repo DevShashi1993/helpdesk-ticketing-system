@@ -1,99 +1,104 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
+import React from 'react'
 
-const columns = [
-  { id: 'tid', label: 'Ticket No.', minWidth: 50 },
-  { id: 'ttitle', label: 'Ticket Title', minWidth: 170 },
-  { id: 'tstatus', label: 'Ticket Status', minWidth: 50 },
-  { id: 'tpriority', label: 'Ticket Status', minWidth: 100 },
-  { id: 'tassignedby', label: 'Ticket Assigned By', minWidth: 120 },
-];
+import CssBaseline from '@material-ui/core/CssBaseline'
+import MaUTable from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
+
+import { useTable } from 'react-table'
+
+import data from './data.json';
+
 
 function createData(tid, ttitle, tstatus, tpriority, tassignedby) {
   return { tid, ttitle, tstatus, tpriority, tassignedby };
 }
 
-const rows = [
-  createData('12345', 'How can I get a refund for my order?', 'Open', 'Low', 'Shashikant Sharma'),
-];
+function Table({ columns, data }) {
+  // Use the state and functions returned from useTable to build your UI
+  const { getTableProps, headerGroups, rows, prepareRow } = useTable({
+    columns,
+    data,
+  })
 
-const useStyles = makeStyles({
-  root: {
-    width: '100%',
-  },
-  container: {
-    maxHeight: 440,
-  },
-});
+  // Render the UI for your table
+  return (
+    <MaUTable {...getTableProps()}>
+      <TableHead>
+        {headerGroups.map(headerGroup => (
+          <TableRow {...headerGroup.getHeaderGroupProps()}>
+            {headerGroup.headers.map(column => (
+              <TableCell {...column.getHeaderProps()}>
+                {column.render('Header')}
+              </TableCell>
+            ))}
+          </TableRow>
+        ))}
+      </TableHead>
+      <TableBody>
+        {rows.map((row, i) => {
+          prepareRow(row)
+          return (
+            <TableRow {...row.getRowProps()}>
+              {row.cells.map(cell => {
+                return (
+                  <TableCell {...cell.getCellProps()}>
+                    {cell.render('Cell')}
+                  </TableCell>
+                )
+              })}
+            </TableRow>
+          )
+        })}
+      </TableBody>
+    </MaUTable>
+  )
+}
 
-const Tickets = () => {
-  const classes = useStyles();
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
+function Tickets() {
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: 'All Tickets',
+        columns: [
+          {
+            Header: 'ID',
+            accessor: 'ticketID',
+          },
+          {
+            Header: 'Title',
+            accessor: 'ticketTitle',
+          },
+          {
+            Header: 'Type',
+            accessor: 'tickeType',
+          },
+          {
+            Header: 'Priority',
+            accessor: 'tickePriority',
+          },
+          {
+            Header: 'Due Date',
+            accessor: 'tickeDueDate',
+          },
+          {
+            Header: 'Status',
+            accessor: 'tickeStatus',
+          },
+        ],
+      },
+    ],
+    []
+  );
 
   return (
-    <Paper className={classes.root}>
-      <TableContainer className={classes.container}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-              return (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                  {columns.map((column) => {
-                    const value = row[column.id];
-                    return (
-                      <TableCell key={column.id} align={column.align}>
-                        {column.format && typeof value === 'number' ? column.format(value) : value}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
-    </Paper>
-  );
+    <div>
+      <CssBaseline />
+      <Table columns={columns} data={data} />
+    </div>
+  )
 }
 
 export default Tickets;

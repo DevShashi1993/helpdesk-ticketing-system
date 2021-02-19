@@ -38,7 +38,8 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     height: '100%',
     overflow: 'hidden',
-    width: '100%'
+    width: '100%',
+    paddingTop: '20px'
   }
 }));
 
