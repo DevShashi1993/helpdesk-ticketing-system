@@ -1,15 +1,17 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Button,
   TextField,
   Grid
 } from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import AddIcon from '@material-ui/icons/Add'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import PropTypes from 'prop-types'
+import Tooltip from '@material-ui/core/Tooltip'
 import { createNewTicket } from '../../../store/actions/ticketActions';
 
 const ticketType = [
@@ -68,32 +70,36 @@ const assignTo = [
     label: 'Shashikant Sharma'
   },
   {
-    value: '100001',
-    label: 'Jeff Luman'
+    value: '100002',
+    label: 'Chris Benetton'
   },
   {
-    value: '100001',
-    label: 'Mike Lyda'
+    value: '100003',
+    label: 'George Wiilam'
   },
   {
-    value: '100001',
-    label: 'Phil Ball'
+    value: '100004',
+    label: 'Rashid Khan'
   }
 ];
 
-export default function TicketModal({ isOpen, handleClose }) {
+
+const TicketModal = ({addUserHandler}) => {
+  const dispatch = useDispatch();
   const { user } = useSelector(state => state.authState);
 
-  const dispatch = useDispatch();
-  const [values, setValues] = useState({
+  const initialValues = {
     ticketTitle: '',
     ticketDesc: '',
-    ticketType: '',
-    ticketPriority: '',
+    ticketType: '101',
+    ticketPriority: '101',
     dueDate: '',
-    assignTo: '',
+    assignTo: '100001',
     createdBy: user.userID
-  });
+  }
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [values, setValues] = useState(initialValues);
 
   const handleChange = event => {
     setValues({
@@ -103,7 +109,6 @@ export default function TicketModal({ isOpen, handleClose }) {
   };
 
   const handleSubmit = ({ticketTitle, ticketDesc, ticketType, ticketPriority, dueDate, assignTo}) => {
-    console.log('submit called');
     dispatch(
       createNewTicket({
         ticketTitle,
@@ -115,52 +120,64 @@ export default function TicketModal({ isOpen, handleClose }) {
         createdBy: user.userID
       })
     );
+    setModalOpen(false);
+    addUserHandler();
+    setValues(initialValues);
   };
 
-  const ticketModal = {
-    display: 'flex',
-    flexDirection: 'column',
-    margin: 'auto',
-    width: 'auto',
-    minWidth: 120
+  
+  const handleClickOpen = () => {
+    setModalOpen(true);
+  };
+
+  const handleClose = () => {
+    setModalOpen(false);
   };
 
   return (
-    <Dialog
-      open={isOpen}
-      onClose={handleClose}
-      aria-labelledby="form-dialog-title"
-      disableBackdropClick={true}
-    >
-      <DialogTitle id="form-dialog-title">Create Ticket</DialogTitle>
-      <DialogContent style={ticketModal}>
-        <form autoComplete="off" noValidate>
-          <Grid container spacing={3}>
+    <div style={{ flex: 3 }}>
+      <Tooltip title="Add">
+        <Button
+          aria-label="add"
+          color="primary"
+          variant="contained"
+          onClick={handleClickOpen}
+          startIcon={<AddIcon />}
+        >
+          Create Ticket
+        </Button>
+      </Tooltip>
+      <Dialog
+        open={modalOpen}
+        onClose={handleClose}
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title">Create Ticket</DialogTitle>
+        <DialogContent>
+          <Grid container spacing={2}>
             <Grid item md={12} xs={12}>
-              <TextField
-                fullWidth
-                helperText="Please specify the Ticket Title"
-                label="Ticket Title"
-                name="ticketTitle"
-                onChange={handleChange}
-                value={values.ticketTitle}
-                required
-                variant="outlined"
-              />
+            <TextField
+              fullWidth
+              label="Ticket Title"
+              name="ticketTitle"
+              onChange={handleChange}
+              value={values.ticketTitle}
+              required
+              variant="outlined"
+            />
             </Grid>
             <Grid item md={12} xs={12}>
-              <TextField
-                fullWidth
-                label="Ticket Description"
-                name="ticketDesc"
-                onChange={handleChange}
-                value={values.ticketDesc}
-                required
-                multiline
-                rows={4}
-                fullWidth
-                variant="outlined"
-              />
+            <TextField
+              fullWidth
+              label="Ticket Description"
+              name="ticketDesc"
+              onChange={handleChange}
+              value={values.ticketDesc}
+              required
+              multiline
+              rows={4}
+              variant="outlined"
+            />
             </Grid>
             <Grid item md={6} xs={12}>
               <TextField
@@ -234,9 +251,8 @@ export default function TicketModal({ isOpen, handleClose }) {
               </TextField>
             </Grid>
           </Grid>
-        </form>
-      </DialogContent>
-      <DialogActions>
+        </DialogContent>
+        <DialogActions>
         <Button onClick={handleClose} color="primary">
           Cancel
         </Button>
@@ -244,6 +260,13 @@ export default function TicketModal({ isOpen, handleClose }) {
           Submit
         </Button>
       </DialogActions>
-    </Dialog>
+      </Dialog>
+    </div>
   );
 }
+
+TicketModal.propTypes = {
+  addUserHandler: PropTypes.func.isRequired,
+}
+
+export default TicketModal

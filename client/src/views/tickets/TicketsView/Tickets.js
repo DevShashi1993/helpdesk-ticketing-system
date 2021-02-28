@@ -1,104 +1,100 @@
-import React from 'react'
-
+import React, {useEffect, useState, useMemo} from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  Card
+} from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline'
-import MaUTable from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
+import EnhancedTable from './EnhancedTable';
+import { getAllTickets } from '../../../store/actions/ticketActions';
 
-import { useTable } from 'react-table'
+const Tickets = () => {
+  const dispatch = useDispatch();
+  
+  const { ticketData } = useSelector(state => state.ticketState);
+  // console.log("ticketData => ", ticketData);
+  
+  const [tableData, setTableData] = useState([]);
+  const [skipPageReset, setSkipPageReset] = useState(false)
 
-import data from './data.json';
+  useEffect(() => {
+    dispatch(getAllTickets());
+  }, [dispatch]);
 
+  useEffect(() => {
+    if (ticketData.length > 0) {
+      setTableData(ticketData);
+    }
+  }, [ticketData]);
 
-function createData(tid, ttitle, tstatus, tpriority, tassignedby) {
-  return { tid, ttitle, tstatus, tpriority, tassignedby };
-}
-
-function Table({ columns, data }) {
-  // Use the state and functions returned from useTable to build your UI
-  const { getTableProps, headerGroups, rows, prepareRow } = useTable({
-    columns,
-    data,
-  })
-
-  // Render the UI for your table
-  return (
-    <MaUTable {...getTableProps()}>
-      <TableHead>
-        {headerGroups.map(headerGroup => (
-          <TableRow {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map(column => (
-              <TableCell {...column.getHeaderProps()}>
-                {column.render('Header')}
-              </TableCell>
-            ))}
-          </TableRow>
-        ))}
-      </TableHead>
-      <TableBody>
-        {rows.map((row, i) => {
-          prepareRow(row)
-          return (
-            <TableRow {...row.getRowProps()}>
-              {row.cells.map(cell => {
-                return (
-                  <TableCell {...cell.getCellProps()}>
-                    {cell.render('Cell')}
-                  </TableCell>
-                )
-              })}
-            </TableRow>
-          )
-        })}
-      </TableBody>
-    </MaUTable>
-  )
-}
-
-function Tickets() {
-  const columns = React.useMemo(
+  const columns = useMemo(
     () => [
       {
-        Header: 'All Tickets',
-        columns: [
-          {
-            Header: 'ID',
-            accessor: 'ticketID',
-          },
-          {
-            Header: 'Title',
-            accessor: 'ticketTitle',
-          },
-          {
-            Header: 'Type',
-            accessor: 'tickeType',
-          },
-          {
-            Header: 'Priority',
-            accessor: 'tickePriority',
-          },
-          {
-            Header: 'Due Date',
-            accessor: 'tickeDueDate',
-          },
-          {
-            Header: 'Status',
-            accessor: 'tickeStatus',
-          },
-        ],
+        Header: 'ID',
+        accessor: 'ticketID',
+      },
+      {
+        Header: 'Title',
+        accessor: 'ticketTitle',
+      },
+      {
+        Header: 'Type',
+        accessor: 'tickeType',
+        
+      },
+      {
+        Header: 'Priority',
+        accessor: 'tickePriority',
+        
+      },
+      {
+        Header: 'Due Date',
+        accessor: 'tickeDueDate',
+        
+      },
+      {
+        Header: 'Status',
+        accessor: 'tickeStatus',
+        
       },
     ],
     []
   );
 
+  
+  // We need to keep the table from resetting the pageIndex when we
+  // Update data. So we can keep track of that flag with a ref.
+
+  // When our cell renderer calls updateMyData, we'll use
+  // the rowIndex, columnId and new value to update the
+  // original data
+  const updateMyData = (rowIndex, columnId, value) => {
+    // We also turn on the flag to not reset the page
+    setSkipPageReset(true)
+    setTableData(old =>
+      old.map((row, index) => {
+        if (index === rowIndex) {
+          return {
+            ...old[rowIndex],
+            [columnId]: value,
+          }
+        }
+        return row
+      })
+    )
+  }
+
   return (
-    <div>
+    <Card>
       <CssBaseline />
-      <Table columns={columns} data={data} />
-    </div>
+      <EnhancedTable
+        columns={columns}
+        data={tableData}
+        setData={setTableData}
+        updateMyData={updateMyData}
+        skipPageReset={skipPageReset}
+      />
+    </Card>
   )
 }
 
-export default Tickets;
+export default Tickets

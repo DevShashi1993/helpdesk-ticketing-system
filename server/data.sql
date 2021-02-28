@@ -17,7 +17,7 @@ INSERT INTO ticket_status(name) VALUES ('On Hold');
 INSERT INTO ticket_status(name) VALUES ('Backlog');
 INSERT INTO ticket_status(name) VALUES ('Waiting For Client');
 
-------------------------- Ticket Status Data -------------------------
+------------------------- Ticket Priority Data -------------------------
 INSERT INTO ticket_priority(name) VALUES ('Low');
 INSERT INTO ticket_priority(name) VALUES ('Medium');
 INSERT INTO ticket_priority(name) VALUES ('High');

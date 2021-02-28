@@ -2,11 +2,9 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import React, { useState } from 'react';
 import { Outlet } from "react-router-dom";
 import { makeStyles } from '@material-ui/core';
-import NavBar from './components/Navbar/Navbar';
+import Navbar from './components/Navbar/Navbar';
 import Sidebar from './components/Sidebar';
-import 'src/mixins/chartjs';
-import theme from 'src/theme';
-import routes from 'src/routes';
+import './mixins/chartjs';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,7 +46,7 @@ const AppLayout = ({ isDashboardLayout }) => {
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
 
   const dashboardLayout = (<>
-    <NavBar onMobileNavOpen={() => setMobileNavOpen(true)} />
+    <Navbar onMobileNavOpen={() => setMobileNavOpen(true)} />
     <Sidebar
       onMobileClose={() => setMobileNavOpen(false)}
       openMobile={isMobileNavOpen}
@@ -63,7 +61,7 @@ const AppLayout = ({ isDashboardLayout }) => {
   </>);
 
   const mainLayout = (<>
-    <NavBar />
+    <Navbar />
     <div className={classes.wrapper}>
       <div className={classes.contentContainer}>
         <div className={classes.content}>

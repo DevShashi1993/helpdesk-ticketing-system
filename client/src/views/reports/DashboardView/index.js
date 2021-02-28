@@ -1,9 +1,6 @@
 import React from 'react';
 import { Button, Container, Grid, makeStyles } from '@material-ui/core';
-import Page from 'src/components/Page';
 import Budget from './Budget';
-import LatestOrders from './LatestOrders';
-import LatestProducts from './LatestProducts';
 import TicketTrends from './TicketTrends';
 import TasksProgress from './TasksProgress';
 import TotalCustomers from './TotalCustomers';

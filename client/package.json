@@ -39,10 +39,10 @@
     "lodash": "^4.17.19",
     "moment": "^2.27.0",
     "namor": "^2.0.2",
-    "nprogress": "^0.2.0",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-chartjs-2": "^2.10.0",
+    "react-data-table-component": "^6.11.7",
     "react-dom": "^16.13.1",
     "react-feather": "^2.0.8",
     "react-helmet": "^6.1.0",
@@ -52,7 +52,9 @@
     "react-router-dom": "^6.0.0-beta.0",
     "react-scripts": "^4.0.0",
     "react-table": "^7.6.3",
+    "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
+    "styled-components": "^5.2.1",
     "uuid": "^8.3.0",
     "yup": "^0.29.3"
   },
@@ -67,5 +69,5 @@
     "eslint-plugin-react-hooks": "^4.0.8",
     "prettier": "^1.19.1"
   },
-  "proxy": "http://192.168.0.110:5000"
+  "proxy": "http://localhost:5000"
 }

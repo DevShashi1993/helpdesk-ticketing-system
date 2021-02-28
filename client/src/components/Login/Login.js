@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import {
@@ -8,19 +8,15 @@ import {
   Box,
   Button,
   Container,
-  Grid,
   Link,
   TextField,
   Typography,
   makeStyles,
   Snackbar
 } from '@material-ui/core';
-import FacebookIcon from 'src/icons/Facebook';
-import GoogleIcon from 'src/icons/Google';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Page from 'src/components/Page';
 import { login } from '../../store/actions/authActions';
-import { Alert, AlertTitle } from '@material-ui/lab';
+import { Alert } from '@material-ui/lab';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -70,7 +66,6 @@ const Login = () => {
     handleBlur,
     values,
     touched,
-    isSubmitting,
     errors
   } = useFormik({
     initialValues: {

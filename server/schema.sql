@@ -23,24 +23,24 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS ticket_type (
    	id INT GENERATED ALWAYS AS IDENTITY (START WITH 101) PRIMARY KEY,
-	name VARCHAR ( 50 ) NOT NULL
-)
+	name VARCHAR ( 50 ) UNIQUE NOT NULL
+);
 
 CREATE TABLE IF NOT EXISTS ticket_status (
    	id INT GENERATED ALWAYS AS IDENTITY (START WITH 101) PRIMARY KEY,
-	name VARCHAR ( 50 ) NOT NULL
-)
+	name VARCHAR ( 50 ) UNIQUE NOT NULL
+);
 
 CREATE TABLE IF NOT EXISTS ticket_priority (
    	id INT GENERATED ALWAYS AS IDENTITY (START WITH 101) PRIMARY KEY,
-	name VARCHAR ( 50 ) NOT NULL
-)
+	name VARCHAR ( 50 ) UNIQUE NOT NULL
+);
 
 ---DATE should be in 'yyyy-mm-dd' format
 CREATE TABLE IF NOT EXISTS tickets (
    	id INT GENERATED ALWAYS AS IDENTITY (START WITH 100001) PRIMARY KEY,
 	ticket_title VARCHAR ( 50 ) NOT NULL,
-	ticket_desc VARCHAR ( 300 ) NOT NULL,
+	ticket_desc VARCHAR ( 500 ) NOT NULL,
 	type_id INT NOT NULL,
 	status_id INT NOT NULL,
 	priority_id INT NOT NULL,
@@ -54,4 +54,4 @@ CREATE TABLE IF NOT EXISTS tickets (
 	CONSTRAINT fk_tickets_ticket_priority FOREIGN KEY(priority_id) REFERENCES ticket_priority(id),
 	CONSTRAINT fk_tickets_users_created_by FOREIGN KEY(created_by) REFERENCES users(user_id),
 	CONSTRAINT fk_tickets_users_assigned_to FOREIGN KEY(assigned_to) REFERENCES users(user_id)
-)
+);

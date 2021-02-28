@@ -7,28 +7,24 @@ import {
   Routes,
   Route,
   Navigate,
-  Switch,
-  useRoutes
 } from 'react-router-dom';
 import { ThemeProvider, makeStyles } from '@material-ui/core';
-import GlobalStyles from 'src/components/GlobalStyles';
-import AccountView from 'src/views/account/AccountView';
+import GlobalStyles from './components/GlobalStyles';
+import AccountView from './views/account/AccountView';
 import DashboardView from './views/reports/DashboardView';
-import NotFoundView from 'src/views/errors/NotFoundView';
-import ProductListView from 'src/views/product/ProductListView';
-import SettingsView from 'src/views/settings/SettingsView';
+import NotFoundView from './views/errors/NotFoundView';
+import ProductListView from './views/product/ProductListView';
+import SettingsView from './views/settings/SettingsView';
 import Register from './components/Register/Register';
 import Login from './components//Login/Login';
 import AppLayout from './AppLayout';
-import 'src/mixins/chartjs';
-import theme from 'src/theme';
-import routes from 'src/routes';
+import './mixins/chartjs';
+import theme from './theme';
 import TicketsView from './views/tickets/TicketsView';
 import ContactListView from './views/customer/ContactListView';
 import setJWTToken from './utilities/setJWTToken';
 import { SET_CURRENT_USER } from './store/actions/types';
 import { logout } from './store/actions/authActions';
-import SecuredRoute from './utilities/secureRoute';
 
 const jwtToken = localStorage.jwtToken;
 
@@ -46,9 +42,6 @@ const useStyles = makeStyles(theme => ({
 const App = () => {
   // const routing = useRoutes(routes);
   const dispatch = useDispatch();
-  const classes = useStyles();
-  const [isMobileNavOpen, setMobileNavOpen] = useState(false);
-  const [isAuth, setIsAuth] = useState(false);
   const { validToken } = useSelector(state => state.authState);
   useEffect(() => {
     if (jwtToken) {
@@ -68,7 +61,7 @@ const App = () => {
         window.location.href = '/login';
       }
     }
-  }, [jwtToken]);
+  }, [dispatch]);
 
   return (
     <ThemeProvider theme={theme}>

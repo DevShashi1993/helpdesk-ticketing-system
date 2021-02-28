@@ -13,7 +13,6 @@ import {
   Typography,
   makeStyles
 } from '@material-ui/core';
-import Page from 'src/components/Page';
 import { createNewUser } from '../../store/actions/authActions';
 import { useFormik } from 'formik';
 

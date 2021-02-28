@@ -5,13 +5,21 @@ const pool = require("../db");
 //all ticket and name
 router.get("/all", authorize, async (req, res) => {
   try {
-    // get ticket name and description for a specified user id
-    const user = await pool.query(
-      "SELECT u.user_name, t.ticket_id, t.description FROM users AS u LEFT JOIN tickets AS t ON u.user_id = t.user_id WHERE u.user_id = $1",
-      [req.user.id]
-    );
+    const getAllTicketsDataQry = `SELECT t.id, ticket_title, ticket_desc, tt.name as ticket_type, ts.name as ticket_status, tp.name as ticket_priority, due_date FROM tickets AS t
+    LEFT JOIN ticket_type AS tt
+    ON tt.id = t.type_id
+    LEFT JOIN ticket_status AS ts
+    ON ts.id = t.status_id
+    LEFT JOIN ticket_priority AS tp
+    ON tp.id = t.priority_id
+    ORDER BY t.id`;
 
-    res.json(user.rows);
+    const allTicketsData = await pool.query(getAllTicketsDataQry);
+
+    if (allTicketsData.rows.length > 0) {
+      // console.log(allTicketsData.rows);
+      return res.status(200).json(allTicketsData.rows);
+    }
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
@@ -21,25 +29,38 @@ router.get("/all", authorize, async (req, res) => {
 //create a ticket, using authorize middleware
 router.post("/new", authorize, async (req, res) => {
   try {
-    const { assignTo, createdBy, dueDate, ticketDesc, ticketPriority, ticketTitle, ticketType } = req.body;
+    let {
+      assignTo,
+      createdBy,
+      dueDate,
+      ticketDesc,
+      ticketPriority,
+      ticketTitle,
+      ticketType,
+    } = req.body;
+
+    // TODO: need to move to utility functions
+    // replaced apostrophe symbol ' with '', just to handle insert query in SQL
+    ticketTitle = ticketTitle.replace(/'/g, "''");
+    ticketDesc = ticketDesc.replace(/'/g, "''");
+
     const ticketInsertQuery = `INSERT INTO tickets(
       ticket_title, ticket_desc, type_id, status_id, priority_id, created_by, assigned_to, due_date, created_on)
       VALUES ('${ticketTitle}', '${ticketDesc}', ${ticketType}, 101, ${ticketPriority}, ${createdBy}, ${assignTo}, '${dueDate}', current_timestamp) RETURNING *`;
-      console.log("something went wrong", ticketInsertQuery);
-      const newticket = await pool.query(ticketInsertQuery);
 
-    if (newticket.rows.length === 1) {
+    const newticketData = await pool.query(ticketInsertQuery);
+
+    if (newticketData.rows.length === 1) {
       return res.status(200).send("Ticket created sucessfully");
     }
-    else {
-      console.log("something went wrong", ticketInsertQuery);
-    }
   } catch (err) {
-    console.error(err.message);
+    console.error(`Error: ${err.message}`);
+    return res.status(500).send("Server error");
   }
 });
 
-//update a ticket
+// TODO: need to be implemented
+// update a ticket
 router.put("/:id", authorize, async (req, res) => {
   try {
     const { id } = req.params;
@@ -59,7 +80,8 @@ router.put("/:id", authorize, async (req, res) => {
   }
 });
 
-//delete a ticket
+// TODO: need to be implemented
+// delete a ticket
 router.delete("/:id", authorize, async (req, res) => {
   try {
     const { id } = req.params;

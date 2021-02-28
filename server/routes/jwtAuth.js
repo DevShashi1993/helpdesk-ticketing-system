@@ -25,7 +25,7 @@ router.post("/register", validInfo, async (req, res) => {
                       INSERT INTO users (first_name, last_name, company_id, email, password, created_on) VALUES
                       ('${firstName}', '${lastName}',(SELECT comp_id FROM company_insert), '${email}', '${bcryptPassword}', current_timestamp)
                       RETURNING user_id`;
-    console.log(insertQry);
+    // console.log(insertQry);
 
     let newUser = await pool.query(insertQry);
 

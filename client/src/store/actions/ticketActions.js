@@ -8,10 +8,9 @@ import {
 } from './types';
 
 export const createNewTicket = ticketData => async dispatch => {
-  console.log('ticketData', ticketData);
+  // console.log('ticketData', ticketData);
   try {
     await axios.post('/ticket/new', ticketData);
-    window.location.href = '/app/tickets';
     dispatch({
       type: ADD_TICKET,
       payload: {}
@@ -24,14 +23,38 @@ export const createNewTicket = ticketData => async dispatch => {
   }
 };
 
-export const getTickets = () => async dispatch => {
-  const res = await axios.get('/ticket/all');
-  dispatch({
-    type: GET_ALL_TICKETS,
-    payload: res.data
-  });
+export const getAllTickets = () => async dispatch => {
+  try {
+    const res = await axios.get('/ticket/all');
+
+    if (res.status === 200) {
+      let ticketData = await res.data;
+
+      ticketData = ticketData.map(obj => {
+        return {
+          ticketID: obj.id,
+          ticketTitle: obj.ticket_title,
+          tickeType: obj.ticket_type,
+          tickePriority: obj.ticket_priority,
+          tickeStatus: obj.ticket_status,
+          tickeDueDate: obj.due_date,
+        };
+      });
+
+      dispatch({
+        type: GET_ALL_TICKETS,
+        payload: ticketData
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: GET_ERRORS,
+      payload: error.response.data
+    });
+  }
 };
 
+// TODO: to be implemented
 export const getTicket = (id, history) => async dispatch => {
   try {
     const res = await axios.get(`/ticket/${id}`);
@@ -44,6 +67,7 @@ export const getTicket = (id, history) => async dispatch => {
   }
 };
 
+// TODO: to be implemented
 export const deleteTicket = id => async dispatch => {
   if (
     window.confirm(
@@ -59,3 +83,7 @@ export const deleteTicket = id => async dispatch => {
     } catch (error) {}
   }
 };
+
+// TODO: Delete Tickets in BULK  - to be implemented
+
+// TODO: Insert Tickets in BULK  - to be implemented
