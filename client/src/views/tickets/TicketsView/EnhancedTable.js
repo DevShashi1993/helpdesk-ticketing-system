@@ -19,7 +19,7 @@ import {
   useSortBy,
   useTable,
 } from 'react-table';
-import { getAllTickets } from '../../../store/actions/ticketActions';
+import { deleteAllTickets, deleteTicket } from '../../../store/actions/ticketActions';
 
 const IndeterminateCheckbox = React.forwardRef(
   ({ indeterminate, ...rest }, ref) => {
@@ -54,6 +54,7 @@ const EnhancedTable = ({
     setPageSize,
     preGlobalFilteredRows,
     setGlobalFilter,
+    selectedFlatRows,
     state: { pageIndex, pageSize, selectedRowIds, globalFilter },
   } = useTable(
     {
@@ -125,24 +126,30 @@ const EnhancedTable = ({
     array.filter((_, i) => !indexs.includes(i))
 
   const deleteUserHandler = event => {
-    const newData = removeByIndexs(
-      data,
-      Object.keys(selectedRowIds).map(x => parseInt(x, 10))
-    )
-    setData(newData)
+    let selectedTicketIds = selectedFlatRows.map(
+      data => data.original.ticketID
+    );
+    if (selectedTicketIds.length == data.length) {
+      console.log('delete all called');
+      dispatch(deleteAllTickets());
+    } else {
+      console.log('delete called with IDs => ' + selectedTicketIds);
+      dispatch(deleteTicket(selectedTicketIds));
+    }
+    
+    // const newData = removeByIndexs(
+    //   data,
+    //   Object.keys(selectedRowIds).map(x => parseInt(x, 10))
+    // )
+    // setData(newData)
   }
-
-  const addUserHandler = () => {
-    dispatch(getAllTickets());
-  }
-
+  
   // Render the UI for your table
   return (
     <TableContainer>
       <TableToolbar
         numSelected={Object.keys(selectedRowIds).length}
         deleteUserHandler={deleteUserHandler}
-        addUserHandler={addUserHandler}
         preGlobalFilteredRows={preGlobalFilteredRows}
         setGlobalFilter={setGlobalFilter}
         globalFilter={globalFilter}

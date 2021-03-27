@@ -7,14 +7,10 @@ import {
   GET_ERRORS
 } from './types';
 
-export const createNewTicket = ticketData => async dispatch => {
-  // console.log('ticketData', ticketData);
+export const createNewTicket = ticketData => async (dispatch, getState) => {
   try {
-    await axios.post('/ticket/new', ticketData);
-    dispatch({
-      type: ADD_TICKET,
-      payload: {}
-    });
+    const res = await axios.post('/ticket/new', ticketData);
+    res.status === 200 && dispatch(getAllTickets());
   } catch (err) {
     dispatch({
       type: GET_ERRORS,
@@ -29,7 +25,7 @@ export const getAllTickets = () => async dispatch => {
 
     if (res.status === 200) {
       let ticketData = await res.data;
-
+      // console.log('ticketData in action => ', ticketData);
       ticketData = ticketData.map(obj => {
         return {
           ticketID: obj.id,
@@ -37,7 +33,7 @@ export const getAllTickets = () => async dispatch => {
           tickeType: obj.ticket_type,
           tickePriority: obj.ticket_priority,
           tickeStatus: obj.ticket_status,
-          tickeDueDate: obj.due_date,
+          tickeDueDate: obj.due_date
         };
       });
 
@@ -67,20 +63,43 @@ export const getTicket = (id, history) => async dispatch => {
   }
 };
 
-// TODO: to be implemented
-export const deleteTicket = id => async dispatch => {
+export const deleteAllTickets = () => async (dispatch, getState) => {
   if (
     window.confirm(
-      'Are you sure? This will delete the ticket and all the data related to it'
+      'Are you sure? This will delete all the tickets and the data related to it'
     )
   ) {
     try {
-      await axios.delete(`/ticket/${id}`);
+      const res = await axios.delete(`/ticket/deleteall`);
+      res.status === 200 && dispatch(getAllTickets());
+    } catch (err) {
       dispatch({
-        type: DELETE_TICKET,
-        payload: id
+        type: GET_ERRORS,
+        payload: err.response.data
       });
-    } catch (error) {}
+    }
+  }
+};
+
+export const deleteTicket = ticketIdArr => async (dispatch, getState) => {
+  if (
+    window.confirm(
+      'Are you sure? This will delete the selected tickets and the data related to it'
+    )
+  ) {
+    try {
+      const res = await axios.delete(`/ticket/delete`, {
+        params: {
+          IDs: ticketIdArr.reduce((acc, curr) => `${acc},${curr}`)
+        }
+      });
+      res.status === 200 && dispatch(getAllTickets());
+    } catch (err) {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    }
   }
 };
 

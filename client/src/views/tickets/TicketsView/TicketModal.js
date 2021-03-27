@@ -1,18 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Button, TextField, Grid } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Tooltip from '@material-ui/core/Tooltip';
 import {
-  Button,
-  TextField,
-  Grid
-} from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add'
-import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import PropTypes from 'prop-types'
-import Tooltip from '@material-ui/core/Tooltip'
-import { createNewTicket } from '../../../store/actions/ticketActions';
+  getAllTickets,
+  createNewTicket
+} from '../../../store/actions/ticketActions';
 
 const ticketType = [
   {
@@ -83,8 +81,7 @@ const assignTo = [
   }
 ];
 
-
-const TicketModal = ({addUserHandler}) => {
+const TicketModal = ({ addUserHandler }) => {
   const dispatch = useDispatch();
   const { user } = useSelector(state => state.authState);
 
@@ -96,7 +93,7 @@ const TicketModal = ({addUserHandler}) => {
     dueDate: '',
     assignTo: '100001',
     createdBy: user.userID
-  }
+  };
 
   const [modalOpen, setModalOpen] = useState(false);
   const [values, setValues] = useState(initialValues);
@@ -108,7 +105,14 @@ const TicketModal = ({addUserHandler}) => {
     });
   };
 
-  const handleSubmit = ({ticketTitle, ticketDesc, ticketType, ticketPriority, dueDate, assignTo}) => {
+  const handleSubmit = ({
+    ticketTitle,
+    ticketDesc,
+    ticketType,
+    ticketPriority,
+    dueDate,
+    assignTo
+  }) => {
     dispatch(
       createNewTicket({
         ticketTitle,
@@ -121,11 +125,9 @@ const TicketModal = ({addUserHandler}) => {
       })
     );
     setModalOpen(false);
-    addUserHandler();
     setValues(initialValues);
   };
 
-  
   const handleClickOpen = () => {
     setModalOpen(true);
   };
@@ -156,28 +158,28 @@ const TicketModal = ({addUserHandler}) => {
         <DialogContent>
           <Grid container spacing={2}>
             <Grid item md={12} xs={12}>
-            <TextField
-              fullWidth
-              label="Ticket Title"
-              name="ticketTitle"
-              onChange={handleChange}
-              value={values.ticketTitle}
-              required
-              variant="outlined"
-            />
+              <TextField
+                fullWidth
+                label="Ticket Title"
+                name="ticketTitle"
+                onChange={handleChange}
+                value={values.ticketTitle}
+                required
+                variant="outlined"
+              />
             </Grid>
             <Grid item md={12} xs={12}>
-            <TextField
-              fullWidth
-              label="Ticket Description"
-              name="ticketDesc"
-              onChange={handleChange}
-              value={values.ticketDesc}
-              required
-              multiline
-              rows={4}
-              variant="outlined"
-            />
+              <TextField
+                fullWidth
+                label="Ticket Description"
+                name="ticketDesc"
+                onChange={handleChange}
+                value={values.ticketDesc}
+                required
+                multiline
+                rows={4}
+                variant="outlined"
+              />
             </Grid>
             <Grid item md={6} xs={12}>
               <TextField
@@ -253,20 +255,16 @@ const TicketModal = ({addUserHandler}) => {
           </Grid>
         </DialogContent>
         <DialogActions>
-        <Button onClick={handleClose} color="primary">
-          Cancel
-        </Button>
-        <Button onClick={() => handleSubmit(values)} color="primary">
-          Submit
-        </Button>
-      </DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={() => handleSubmit(values)} color="primary">
+            Submit
+          </Button>
+        </DialogActions>
       </Dialog>
     </div>
   );
-}
+};
 
-TicketModal.propTypes = {
-  addUserHandler: PropTypes.func.isRequired,
-}
-
-export default TicketModal
+export default TicketModal;

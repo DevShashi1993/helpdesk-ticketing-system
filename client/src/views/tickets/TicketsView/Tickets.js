@@ -11,7 +11,7 @@ const Tickets = () => {
   const dispatch = useDispatch();
   
   const { ticketData } = useSelector(state => state.ticketState);
-  // console.log("ticketData => ", ticketData);
+  console.log("ticketData => ", ticketData);
   
   const [tableData, setTableData] = useState([]);
   const [skipPageReset, setSkipPageReset] = useState(false)
@@ -20,11 +20,11 @@ const Tickets = () => {
     dispatch(getAllTickets());
   }, [dispatch]);
 
-  useEffect(() => {
-    if (ticketData.length > 0) {
-      setTableData(ticketData);
-    }
-  }, [ticketData]);
+  // useEffect(() => {
+  //   if (ticketData.length > 0) {
+  //     setTableData(ticketData);
+  //   }
+  // }, [ticketData]);
 
   const columns = useMemo(
     () => [

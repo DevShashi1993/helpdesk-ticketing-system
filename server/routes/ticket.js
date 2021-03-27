@@ -16,7 +16,7 @@ router.get("/all", authorize, async (req, res) => {
 
     const allTicketsData = await pool.query(getAllTicketsDataQry);
 
-    if (allTicketsData.rows.length > 0) {
+    if (allTicketsData.rows.length >= 0) {
       // console.log(allTicketsData.rows);
       return res.status(200).json(allTicketsData.rows);
     }
@@ -80,21 +80,30 @@ router.put("/:id", authorize, async (req, res) => {
   }
 });
 
-// TODO: need to be implemented
-// delete a ticket
-router.delete("/:id", authorize, async (req, res) => {
+// delete all tickets
+router.delete("/deleteall", authorize, async (req, res) => {
   try {
-    const { id } = req.params;
-    const deleteticket = await pool.query(
-      "DELETE FROM ticket WHERE t_id = $1 AND user_id = $2 RETURNING *",
-      [id, req.user.id]
-    );
+    const ticketDeleteQuery = `DELETE FROM tickets RETURNING *`;
+    const deletedTicketData = await pool.query(ticketDeleteQuery);
 
-    if (deleteticket.rows.length === 0) {
-      return res.json("This ticket is not yours");
+    if (deletedTicketData.rows.length > 0) {
+      return res.status(200).send("All Tickets deleted sucessfully");
     }
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
-    res.json("ticket was deleted");
+// delete a ticket
+router.delete("/delete", authorize, async (req, res) => {
+  try {
+    const { IDs } = req.query;
+    const ticketDeleteQuery = `DELETE FROM tickets WHERE id IN(${IDs}) RETURNING *`;
+    const deletedTicketData = await pool.query(ticketDeleteQuery);
+
+    if (deletedTicketData.rows.length > 0) {
+      return res.status(200).send("Ticket deleted sucessfully");
+    }
   } catch (err) {
     console.error(err.message);
   }
