@@ -121,6 +121,7 @@ const TicketModal = ({ addUserHandler }) => {
         ticketPriority,
         dueDate,
         assignTo,
+        compId: user.compId,
         createdBy: user.userID
       })
     );

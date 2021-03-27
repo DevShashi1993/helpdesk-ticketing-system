@@ -109,7 +109,7 @@ const EnhancedTable = ({
   }, [setPageSize]);
 
   useEffect(() => {
-    if (ticketData.length > 0) {
+    if (ticketData) {
       setData(ticketData);
     }
   }, [setData, ticketData]);
@@ -129,7 +129,7 @@ const EnhancedTable = ({
     let selectedTicketIds = selectedFlatRows.map(
       data => data.original.ticketID
     );
-    if (selectedTicketIds.length == data.length) {
+    if (selectedTicketIds.length === data.length) {
       console.log('delete all called');
       dispatch(deleteAllTickets());
     } else {

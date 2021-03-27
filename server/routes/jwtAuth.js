@@ -63,8 +63,8 @@ router.post("/login", validInfo, async (req, res) => {
         return res.status(401).json("Invalid Credential");
       }
       const jwtToken = jwtGenerator(user.rows[0].user_id);
-      const {user_id, first_name, last_name, email} = user.rows[0];
-      return res.json({ user_id, first_name, last_name, email, jwtToken });
+      const {user_id, first_name, last_name, company_id, email} = user.rows[0];
+      return res.json({ user_id, first_name, last_name, company_id, email, jwtToken });
     }
   } catch (err) {
     console.error(err.message);

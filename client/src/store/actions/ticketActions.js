@@ -19,9 +19,15 @@ export const createNewTicket = ticketData => async (dispatch, getState) => {
   }
 };
 
-export const getAllTickets = () => async dispatch => {
+export const getAllTickets = () => async (dispatch, getState) => {
   try {
-    const res = await axios.get('/ticket/all');
+    let compId = getState().authState.user.compId;
+    console.dir(compId);
+    const res = await axios.get('/ticket/all', {
+      params: {
+        compId: compId,
+      },
+    });
 
     if (res.status === 200) {
       let ticketData = await res.data;
@@ -39,7 +45,7 @@ export const getAllTickets = () => async dispatch => {
 
       dispatch({
         type: GET_ALL_TICKETS,
-        payload: ticketData
+        payload: ticketData || []
       });
     }
   } catch (error) {
@@ -70,7 +76,12 @@ export const deleteAllTickets = () => async (dispatch, getState) => {
     )
   ) {
     try {
-      const res = await axios.delete(`/ticket/deleteall`);
+      let compId = getState().authState.user.compId;
+      const res = await axios.delete(`/ticket/deleteall`, {
+        params: {
+          compId: compId,
+        },
+      });
       res.status === 200 && dispatch(getAllTickets());
     } catch (err) {
       dispatch({
@@ -88,9 +99,11 @@ export const deleteTicket = ticketIdArr => async (dispatch, getState) => {
     )
   ) {
     try {
+      let compId = getState().authState.user.compId;
       const res = await axios.delete(`/ticket/delete`, {
         params: {
-          IDs: ticketIdArr.reduce((acc, curr) => `${acc},${curr}`)
+          IDs: ticketIdArr.reduce((acc, curr) => `${acc},${curr}`),
+          compId: compId,
         }
       });
       res.status === 200 && dispatch(getAllTickets());

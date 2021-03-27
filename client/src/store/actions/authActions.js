@@ -22,12 +22,13 @@ export const createNewUser = newUser => async dispatch => {
 export const login = LoginRequest => async dispatch => {
   try {
     const res = await axios.post('/authentication/login', LoginRequest);
-    const { user_id, first_name, last_name, email, jwtToken } = await res.data;
+    const { user_id, first_name, last_name, company_id, email, jwtToken } = await res.data;
     let userData = {
       userID: user_id,
       firstName: first_name,
       lastName: last_name,
-      email: email
+      email: email,
+      compId: company_id
     };
 
     if (jwtToken) {

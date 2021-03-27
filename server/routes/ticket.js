@@ -4,6 +4,7 @@ const pool = require("../db");
 
 //all ticket and name
 router.get("/all", authorize, async (req, res) => {
+  const { compId } = req.query;
   try {
     const getAllTicketsDataQry = `SELECT t.id, ticket_title, ticket_desc, tt.name as ticket_type, ts.name as ticket_status, tp.name as ticket_priority, due_date FROM tickets AS t
     LEFT JOIN ticket_type AS tt
@@ -12,6 +13,7 @@ router.get("/all", authorize, async (req, res) => {
     ON ts.id = t.status_id
     LEFT JOIN ticket_priority AS tp
     ON tp.id = t.priority_id
+    WHERE t.company_id = ${compId}
     ORDER BY t.id`;
 
     const allTicketsData = await pool.query(getAllTicketsDataQry);
@@ -37,6 +39,7 @@ router.post("/new", authorize, async (req, res) => {
       ticketPriority,
       ticketTitle,
       ticketType,
+      compId,
     } = req.body;
 
     // TODO: need to move to utility functions
@@ -45,9 +48,9 @@ router.post("/new", authorize, async (req, res) => {
     ticketDesc = ticketDesc.replace(/'/g, "''");
 
     const ticketInsertQuery = `INSERT INTO tickets(
-      ticket_title, ticket_desc, type_id, status_id, priority_id, created_by, assigned_to, due_date, created_on)
-      VALUES ('${ticketTitle}', '${ticketDesc}', ${ticketType}, 101, ${ticketPriority}, ${createdBy}, ${assignTo}, '${dueDate}', current_timestamp) RETURNING *`;
-
+      ticket_title, ticket_desc, type_id, status_id, priority_id, created_by, assigned_to, company_id, due_date, created_on)
+      VALUES ('${ticketTitle}', '${ticketDesc}', ${ticketType}, 101, ${ticketPriority}, ${createdBy}, ${assignTo}, ${compId}, '${dueDate}', current_timestamp) RETURNING *`;
+    
     const newticketData = await pool.query(ticketInsertQuery);
 
     if (newticketData.rows.length === 1) {
@@ -82,11 +85,12 @@ router.put("/:id", authorize, async (req, res) => {
 
 // delete all tickets
 router.delete("/deleteall", authorize, async (req, res) => {
+  const { compId } = req.query;
   try {
-    const ticketDeleteQuery = `DELETE FROM tickets RETURNING *`;
-    const deletedTicketData = await pool.query(ticketDeleteQuery);
-
-    if (deletedTicketData.rows.length > 0) {
+    const ticketDeleteAllQuery = `DELETE FROM tickets WHERE company_id = ${compId} RETURNING *`;
+    const deletedAllTicketData = await pool.query(ticketDeleteAllQuery);
+    console.log(deletedAllTicketData);
+    if (deletedAllTicketData.rows.length > 0) {
       return res.status(200).send("All Tickets deleted sucessfully");
     }
   } catch (err) {
@@ -96,9 +100,10 @@ router.delete("/deleteall", authorize, async (req, res) => {
 
 // delete a ticket
 router.delete("/delete", authorize, async (req, res) => {
+  const { compId } = req.query;
   try {
     const { IDs } = req.query;
-    const ticketDeleteQuery = `DELETE FROM tickets WHERE id IN(${IDs}) RETURNING *`;
+    const ticketDeleteQuery = `DELETE FROM tickets WHERE id IN(${IDs}) AND company_id = ${compId} RETURNING *`;
     const deletedTicketData = await pool.query(ticketDeleteQuery);
 
     if (deletedTicketData.rows.length > 0) {

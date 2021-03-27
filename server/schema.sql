@@ -20,7 +20,6 @@ CREATE TABLE IF NOT EXISTS users (
 	CONSTRAINT fk_users_company FOREIGN KEY(company_id) REFERENCES company(comp_id)
 );
 
-
 CREATE TABLE IF NOT EXISTS ticket_type (
    	id INT GENERATED ALWAYS AS IDENTITY (START WITH 101) PRIMARY KEY,
 	name VARCHAR ( 50 ) UNIQUE NOT NULL
@@ -46,6 +45,7 @@ CREATE TABLE IF NOT EXISTS tickets (
 	priority_id INT NOT NULL,
 	created_by INT NOT NULL,
 	assigned_to INT NOT NULL,
+	company_id INT NOT NULL,
 	due_date DATE NOT NULL,
 	tags VARCHAR ( 100 ),
 	created_on TIMESTAMP NOT NULL,

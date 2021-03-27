@@ -6,7 +6,8 @@ const initialSate = {
     firstName: '',
     lastName: '',
     email: '',
-    companyName: ''
+    companyName: '',
+    compId: ''
   },
   validToken: false,
   error: null
