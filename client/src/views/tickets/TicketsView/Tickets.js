@@ -5,6 +5,7 @@ import {
 } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline'
 import EnhancedTable from './EnhancedTable';
+import TicketModal from './TicketModal';
 import { getAllTickets } from '../../../store/actions/ticketActions';
 
 const Tickets = () => {
@@ -20,17 +21,27 @@ const Tickets = () => {
     dispatch(getAllTickets());
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   if (ticketData.length > 0) {
-  //     setTableData(ticketData);
-  //   }
-  // }, [ticketData]);
+  const [ticketModalOpen, setTicketModalOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setTicketModalOpen(true);
+  };
+
+  const handleClose = () => {
+    setTicketModalOpen(false);
+  };
+
+  const openTicket = (id) => {
+    handleClickOpen();
+    console.log("openTicket called with id =>", id);
+  }
 
   const columns = useMemo(
     () => [
       {
         Header: 'ID',
         accessor: 'ticketID',
+        Cell: (e) => <a href="#" onClick={() => openTicket(e.value)}> {e.value} </a>
       },
       {
         Header: 'Title',
@@ -83,6 +94,7 @@ const Tickets = () => {
     )
   }
 
+
   return (
     <Card>
       <CssBaseline />
@@ -93,6 +105,7 @@ const Tickets = () => {
         updateMyData={updateMyData}
         skipPageReset={skipPageReset}
       />
+      <TicketModal handleClickOpen={handleClickOpen} handleClose={handleClose} ticketModalOpen={ticketModalOpen}/>
     </Card>
   )
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import TicketModal from './TicketModal';
+import CreateTicketModal from './CreateTicketModal';
 import clsx from 'clsx';
 import DeleteIcon from '@material-ui/icons/Delete';
 import GlobalFilter from './GlobalFilter';
@@ -42,7 +42,7 @@ const TableToolbar = props => {
         [classes.highlight]: numSelected > 0
       })}
     >
-      <TicketModal className={classes.title} />
+      <CreateTicketModal className={classes.title} />
 
       {numSelected > 0 ? (
         <>

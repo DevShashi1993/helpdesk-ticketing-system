@@ -1,271 +1,142 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Button, TextField, Grid } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Tooltip from '@material-ui/core/Tooltip';
 import {
-  getAllTickets,
-  createNewTicket
-} from '../../../store/actions/ticketActions';
+  Grid,
+  Typography,
+  makeStyles
+} from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import Bookmark from '@material-ui/icons/Bookmark';
+import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
+import Dialog from '@material-ui/core/Dialog';
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+// import DialogTitle from '@material-ui/core/DialogTitle';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
-const ticketType = [
-  {
-    value: '101',
-    label: 'Defect'
+const styles = (theme) => ({
+  root: {
+    margin: 0,
+    padding: theme.spacing(2),
   },
-  {
-    value: '102',
-    label: 'Feature Request'
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.grey,
   },
-  {
-    value: '103',
-    label: 'New Feature'
+  bookmarkButton: {
+    position: 'absolute',
+    right: theme.spacing(6),
+    top: theme.spacing(1),
+    color: theme.palette.grey,
   },
-  {
-    value: '104',
-    label: 'Research'
-  },
-  {
-    value: '105',
-    label: 'Request'
-  },
-  {
-    value: '106',
-    label: 'Questionnaire'
-  },
-  {
-    value: '107',
-    label: 'Incident'
-  }
-];
+});
 
-const ticketPriority = [
-  {
-    value: '101',
-    label: 'Low'
-  },
-  {
-    value: '102',
-    label: 'Medium'
-  },
-  {
-    value: '103',
-    label: 'High'
-  },
-  {
-    value: '104',
-    label: 'Urgent'
-  }
-];
+const DialogTitle = withStyles(styles)((props) => {
+  const { children, classes, onClose, ...other } = props;
+  return (
+    <MuiDialogTitle disableTypography className={classes.root} {...other}>
+      <Typography variant="h6">{children}</Typography>
+      <IconButton color="primary" aria-label="bookmark" className={classes.bookmarkButton}>
+          <BookmarkBorderIcon />
+        </IconButton>
+      {onClose ? (
+        <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
+          <CloseIcon />
+        </IconButton>
+      ) : null}
+    </MuiDialogTitle>
+  );
+});
 
-const assignTo = [
-  {
-    value: '100001',
-    label: 'Shashikant Sharma'
-  },
-  {
-    value: '100002',
-    label: 'Chris Benetton'
-  },
-  {
-    value: '100003',
-    label: 'George Wiilam'
-  },
-  {
-    value: '100004',
-    label: 'Rashid Khan'
-  }
-];
-
-const TicketModal = ({ addUserHandler }) => {
+const TicketModal = ({handleClickOpen, handleClose, ticketModalOpen}) => {
   const dispatch = useDispatch();
-  const { user } = useSelector(state => state.authState);
-
-  const initialValues = {
-    ticketTitle: '',
-    ticketDesc: '',
-    ticketType: '101',
-    ticketPriority: '101',
-    dueDate: '',
-    assignTo: '100001',
-    createdBy: user.userID
-  };
-
-  const [modalOpen, setModalOpen] = useState(false);
-  const [values, setValues] = useState(initialValues);
-
-  const handleChange = event => {
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value
-    });
-  };
-
-  const handleSubmit = ({
-    ticketTitle,
-    ticketDesc,
-    ticketType,
-    ticketPriority,
-    dueDate,
-    assignTo
-  }) => {
-    dispatch(
-      createNewTicket({
-        ticketTitle,
-        ticketDesc,
-        ticketType,
-        ticketPriority,
-        dueDate,
-        assignTo,
-        compId: user.compId,
-        createdBy: user.userID
-      })
-    );
-    setModalOpen(false);
-    setValues(initialValues);
-  };
-
-  const handleClickOpen = () => {
-    setModalOpen(true);
-  };
-
-  const handleClose = () => {
-    setModalOpen(false);
-  };
+  // const classes = useStyles();
 
   return (
     <div style={{ flex: 3 }}>
-      <Tooltip title="Add">
-        <Button
-          aria-label="add"
-          color="primary"
-          variant="contained"
-          onClick={handleClickOpen}
-          startIcon={<AddIcon />}
-        >
-          Create Ticket
-        </Button>
-      </Tooltip>
       <Dialog
-        open={modalOpen}
+        open={ticketModalOpen}
         onClose={handleClose}
-        aria-labelledby="form-dialog-title"
+        aria-labelledby="ticket-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Create Ticket</DialogTitle>
-        <DialogContent>
+        <DialogTitle id="ticket-dialog-title" onClose={handleClose}>
+            Ticket #10005
+        </DialogTitle>
+        <DialogContent dividers>
           <Grid container spacing={2}>
             <Grid item md={12} xs={12}>
-              <TextField
-                fullWidth
-                label="Ticket Title"
-                name="ticketTitle"
-                onChange={handleChange}
-                value={values.ticketTitle}
-                required
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item md={12} xs={12}>
-              <TextField
-                fullWidth
-                label="Ticket Description"
-                name="ticketDesc"
-                onChange={handleChange}
-                value={values.ticketDesc}
-                required
-                multiline
-                rows={4}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                label="Ticket Type"
-                name="ticketType"
-                onChange={handleChange}
-                value={values.ticketType}
-                required
-                select
-                SelectProps={{ native: true }}
-                variant="outlined"
-              >
-                {ticketType.map(option => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                label="Ticket Priority"
-                name="ticketPriority"
-                onChange={handleChange}
-                value={values.ticketPriority}
-                required
-                select
-                SelectProps={{ native: true }}
-                variant="outlined"
-              >
-                {ticketPriority.map(option => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                label="Due Date"
-                name="dueDate"
-                type="date"
-                onChange={handleChange}
-                InputLabelProps={{
-                  shrink: true
-                }}
-                required
-                value={values.dueDate}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                label="Assign To"
-                name="assignTo"
-                onChange={handleChange}
-                value={values.assignTo}
-                select
-                SelectProps={{ native: true }}
-                variant="outlined"
-              >
-                {assignTo.map(option => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
-            </Grid>
+              <Typography gutterBottom variant="h5" component="h2">
+                Title: 
+              </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+                Test Ticket 10005 
+              </Typography>
+              </Grid>
+              <Grid item md={12} xs={12}>
+              <Typography gutterBottom variant="h5" component="h2">
+                Description: 
+              </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+                Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
+                across all continents except Antarctica   
+              </Typography>
+              </Grid>
+              <Grid item md={12} xs={12}>
+              <Typography gutterBottom variant="h5" component="h2">
+                Tags: 
+              </Typography>
+              </Grid>
+              <Grid item md={12} xs={12}>
+              <Typography gutterBottom variant="h5" component="h2">
+                Due Date: 
+              </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+                25/04/2021
+              </Typography>
+              </Grid>
+              <Grid item md={12} xs={12}>
+              <Typography gutterBottom variant="h5" component="h2">
+                Assigned To: 
+              </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+                Shashikant Sharma
+              </Typography>
+              </Grid>
           </Grid>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={() => handleSubmit(values)} color="primary">
-            Submit
-          </Button>
-        </DialogActions>
       </Dialog>
     </div>
   );
 };
 
 export default TicketModal;
+
+// const TicketModal = React.memo(function ProjectCard() {
+//     const styles = useN03TextInfoContentStyles();
+//     const shadowStyles = useLightTopShadowStyles();
+//     const cardStyles = useStyles();
+
+//     return (
+//       <Card className={cx(cardStyles.root, shadowStyles.root)}>
+//         <BrandCardHeader
+//           image={
+//             'https://pngimage.net/wp-content/uploads/2018/06/react-icon-png-7.png'
+//           }
+//           extra={'7 minutes'}
+//         />
+//         <CardContent className={cardStyles.content}>
+//           <TextInfoContent
+//             classes={styles}
+//             overline={'FACEBOOK INC.'}
+//             heading={'React'}
+//             body={
+//               'A JavaScript library for building user interfaces. Build encapsulated components that manage their own state, then compose them to make complex UIs.'
+//             }
+//           />
+//         </CardContent>
+//       </Card>
+//     );
+//   });
