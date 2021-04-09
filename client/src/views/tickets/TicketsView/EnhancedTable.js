@@ -102,17 +102,17 @@ const EnhancedTable = ({
   );
 
   const dispatch = useDispatch();
-  const { ticketData } = useSelector(state => state.ticketState);
+  const { allTicketData } = useSelector(state => state.ticketState);
 
   useEffect(() => {
     setPageSize(Number(5));
   }, [setPageSize]);
 
   useEffect(() => {
-    if (ticketData) {
-      setData(ticketData);
+    if (allTicketData) {
+      setData(allTicketData);
     }
-  }, [setData, ticketData]);
+  }, [setData, allTicketData]);
 
   const handleChangePage = (event, newPage) => {
     gotoPage(newPage)

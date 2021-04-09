@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  Grid,
-  Typography,
-  makeStyles
-} from '@material-ui/core';
+import { Grid, Typography, makeStyles } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Bookmark from '@material-ui/icons/Bookmark';
 import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
@@ -15,35 +11,43 @@ import DialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
-const styles = (theme) => ({
+const styles = theme => ({
   root: {
     margin: 0,
-    padding: theme.spacing(2),
+    padding: theme.spacing(2)
   },
   closeButton: {
     position: 'absolute',
     right: theme.spacing(1),
     top: theme.spacing(1),
-    color: theme.palette.grey,
+    color: theme.palette.grey
   },
   bookmarkButton: {
     position: 'absolute',
     right: theme.spacing(6),
     top: theme.spacing(1),
-    color: theme.palette.grey,
-  },
+    color: theme.palette.grey
+  }
 });
 
-const DialogTitle = withStyles(styles)((props) => {
+const DialogTitle = withStyles(styles)(props => {
   const { children, classes, onClose, ...other } = props;
   return (
     <MuiDialogTitle disableTypography className={classes.root} {...other}>
-      <Typography variant="h6">{children}</Typography>
-      <IconButton color="primary" aria-label="bookmark" className={classes.bookmarkButton}>
-          <BookmarkBorderIcon />
-        </IconButton>
+      <Typography variant="h3">{children}</Typography>
+      <IconButton
+        color="primary"
+        aria-label="bookmark"
+        className={classes.bookmarkButton}
+      >
+        <BookmarkBorderIcon />
+      </IconButton>
       {onClose ? (
-        <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
+        <IconButton
+          aria-label="close"
+          className={classes.closeButton}
+          onClick={onClose}
+        >
           <CloseIcon />
         </IconButton>
       ) : null}
@@ -51,9 +55,17 @@ const DialogTitle = withStyles(styles)((props) => {
   );
 });
 
-const TicketModal = ({handleClickOpen, handleClose, ticketModalOpen}) => {
-  const dispatch = useDispatch();
-  // const classes = useStyles();
+const TicketModal = ({ handleClickOpen, handleClose, ticketModalOpen, data }) => {
+  const {
+    ticketTitle,
+    ticketDesc,
+    tickeType,
+    tickePriority,
+    tickeStatus,
+    tickeDueDate
+  } = data;
+
+  console.log('modal data: ', data);
 
   return (
     <div style={{ flex: 3 }}>
@@ -63,48 +75,59 @@ const TicketModal = ({handleClickOpen, handleClose, ticketModalOpen}) => {
         aria-labelledby="ticket-dialog-title"
       >
         <DialogTitle id="ticket-dialog-title" onClose={handleClose}>
-            Ticket #10005
+          Ticket #10005
         </DialogTitle>
         <DialogContent dividers>
           <Grid container spacing={2}>
             <Grid item md={12} xs={12}>
               <Typography gutterBottom variant="h5" component="h2">
-                Title: 
+                Title:
               </Typography>
               <Typography variant="body2" color="textSecondary" component="p">
-                Test Ticket 10005 
+                Test Ticket 10005
               </Typography>
-              </Grid>
-              <Grid item md={12} xs={12}>
+            </Grid>
+            <Grid item md={12} xs={12}>
               <Typography gutterBottom variant="h5" component="h2">
-                Description: 
+                Description:
               </Typography>
               <Typography variant="body2" color="textSecondary" component="p">
-                Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica   
+                Lizards are a widespread group of squamate reptiles, with over
+                6,000 species, ranging across all continents except Antarctica
               </Typography>
-              </Grid>
-              <Grid item md={12} xs={12}>
+            </Grid>
+            <Grid item md={6} xs={6}>
               <Typography gutterBottom variant="h5" component="h2">
-                Tags: 
+                Ticket Type: 
               </Typography>
-              </Grid>
-              <Grid item md={12} xs={12}>
+              <Typography variant="body2" color="textSecondary" component="p">
+                New Feature
+              </Typography>
+            </Grid>
+            <Grid item md={6} xs={6}>
               <Typography gutterBottom variant="h5" component="h2">
-                Due Date: 
+                Priority:
+              </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+                Medium
+              </Typography>
+            </Grid>
+            <Grid item md={6} xs={6}>
+              <Typography gutterBottom variant="h5" component="h2">
+                Due Date:
               </Typography>
               <Typography variant="body2" color="textSecondary" component="p">
                 25/04/2021
               </Typography>
-              </Grid>
-              <Grid item md={12} xs={12}>
+            </Grid>
+            <Grid item md={6} xs={6}>
               <Typography gutterBottom variant="h5" component="h2">
-                Assigned To: 
+                Assigned To:
               </Typography>
               <Typography variant="body2" color="textSecondary" component="p">
                 Shashikant Sharma
               </Typography>
-              </Grid>
+            </Grid>
           </Grid>
         </DialogContent>
       </Dialog>
@@ -113,30 +136,3 @@ const TicketModal = ({handleClickOpen, handleClose, ticketModalOpen}) => {
 };
 
 export default TicketModal;
-
-// const TicketModal = React.memo(function ProjectCard() {
-//     const styles = useN03TextInfoContentStyles();
-//     const shadowStyles = useLightTopShadowStyles();
-//     const cardStyles = useStyles();
-
-//     return (
-//       <Card className={cx(cardStyles.root, shadowStyles.root)}>
-//         <BrandCardHeader
-//           image={
-//             'https://pngimage.net/wp-content/uploads/2018/06/react-icon-png-7.png'
-//           }
-//           extra={'7 minutes'}
-//         />
-//         <CardContent className={cardStyles.content}>
-//           <TextInfoContent
-//             classes={styles}
-//             overline={'FACEBOOK INC.'}
-//             heading={'React'}
-//             body={
-//               'A JavaScript library for building user interfaces. Build encapsulated components that manage their own state, then compose them to make complex UIs.'
-//             }
-//           />
-//         </CardContent>
-//       </Card>
-//     );
-//   });

@@ -6,13 +6,13 @@ import {
 import CssBaseline from '@material-ui/core/CssBaseline'
 import EnhancedTable from './EnhancedTable';
 import TicketModal from './TicketModal';
-import { getAllTickets } from '../../../store/actions/ticketActions';
+import { getAllTickets, getTicket } from '../../../store/actions/ticketActions';
 
 const Tickets = () => {
   const dispatch = useDispatch();
   
-  const { ticketData } = useSelector(state => state.ticketState);
-  console.log("ticketData => ", ticketData);
+  const { allTicketData } = useSelector(state => state.ticketState);
+  console.log("ticketData => ", allTicketData);
   
   const [tableData, setTableData] = useState([]);
   const [skipPageReset, setSkipPageReset] = useState(false)
@@ -22,6 +22,7 @@ const Tickets = () => {
   }, [dispatch]);
 
   const [ticketModalOpen, setTicketModalOpen] = useState(false);
+  const [ticketData, setTicketData] = useState({});
 
   const handleClickOpen = () => {
     setTicketModalOpen(true);
@@ -31,10 +32,11 @@ const Tickets = () => {
     setTicketModalOpen(false);
   };
 
-  const openTicket = (id) => {
+  const openTicket = async id => {
+    let data = await dispatch(getTicket(id));
+    setTicketData(data);
     handleClickOpen();
-    console.log("openTicket called with id =>", id);
-  }
+  };
 
   const columns = useMemo(
     () => [
@@ -105,9 +107,14 @@ const Tickets = () => {
         updateMyData={updateMyData}
         skipPageReset={skipPageReset}
       />
-      <TicketModal handleClickOpen={handleClickOpen} handleClose={handleClose} ticketModalOpen={ticketModalOpen}/>
+      <TicketModal
+        handleClickOpen={handleClickOpen}
+        handleClose={handleClose}
+        ticketModalOpen={ticketModalOpen}
+        data={ticketData}
+      />
     </Card>
-  )
+  );
 }
 
 export default Tickets

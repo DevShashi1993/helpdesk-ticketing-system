@@ -28,6 +28,33 @@ router.get("/all", authorize, async (req, res) => {
   }
 });
 
+//get single ticket by id
+router.get("/", authorize, async (req, res) => {
+  const { id, compId } = req.query;
+  if (id && compId) {
+    try {
+      const getTicketDataQry = `SELECT t.id, ticket_title, ticket_desc, tt.name as ticket_type, ts.name as ticket_status, tp.name as ticket_priority, due_date FROM tickets AS t
+      LEFT JOIN ticket_type AS tt
+      ON tt.id = t.type_id
+      LEFT JOIN ticket_status AS ts
+      ON ts.id = t.status_id
+      LEFT JOIN ticket_priority AS tp
+      ON tp.id = t.priority_id
+      WHERE t.id = ${id} AND t.company_id = ${compId}`;
+
+      const ticketData = await pool.query(getTicketDataQry);
+
+      if (ticketData.rows.length == 1) {
+        // console.log(allTicketsData.rows);
+        return res.status(200).json(ticketData.rows);
+      }
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server error");
+    }
+  }
+});
+
 //create a ticket, using authorize middleware
 router.post("/new", authorize, async (req, res) => {
   try {

@@ -1,7 +1,7 @@
 import { GET_ALL_TICKETS, ADD_TICKET, GET_ERRORS } from '../actions/types';
 
 const initialSate = {
-  ticketData: [],
+  allTicketData: [],
   error: null
 };
 
@@ -10,7 +10,7 @@ const ticketReducer = (state = initialSate, action) => {
     case GET_ALL_TICKETS:
       return {
         ...state,
-        ticketData: action.payload
+        allTicketData: action.payload
       };
     case ADD_TICKET:
       return {

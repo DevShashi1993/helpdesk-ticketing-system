@@ -30,9 +30,8 @@ export const getAllTickets = () => async (dispatch, getState) => {
     });
 
     if (res.status === 200) {
-      let ticketData = await res.data;
-      // console.log('ticketData in action => ', ticketData);
-      ticketData = ticketData.map(obj => {
+      let allTicketData = await res.data;
+      allTicketData = allTicketData.map(obj => {
         return {
           ticketID: obj.id,
           ticketTitle: obj.ticket_title,
@@ -45,7 +44,7 @@ export const getAllTickets = () => async (dispatch, getState) => {
 
       dispatch({
         type: GET_ALL_TICKETS,
-        payload: ticketData || []
+        payload: allTicketData || []
       });
     }
   } catch (error) {
@@ -56,16 +55,38 @@ export const getAllTickets = () => async (dispatch, getState) => {
   }
 };
 
-// TODO: to be implemented
-export const getTicket = (id, history) => async dispatch => {
+export const getTicket = id => async (dispatch, getState) => {
   try {
-    const res = await axios.get(`/ticket/${id}`);
-    dispatch({
-      type: GET_TICKET,
-      payload: res.data
+    let compId = getState().authState.user.compId;
+    const res = await axios.get(`/ticket`, {
+      params: { id: id,  compId: compId }
     });
+
+    if (res.status === 200) {
+      let ticketData = await res.data;
+      ticketData = ticketData.map(obj => {
+        return {
+          ticketID: obj.id,
+          ticketTitle: obj.ticket_title,
+          ticketDesc: obj.ticket_desc,
+          tickeType: obj.ticket_type,
+          tickePriority: obj.ticket_priority,
+          tickeStatus: obj.ticket_status,
+          tickeDueDate: obj.due_date
+        };
+      });
+
+      return ticketData;
+
+      // dispatch({
+      //   type: GET_TICKET,
+      //   payload: res.data
+      // });
+    }
+    
   } catch (error) {
-    history.push('/dashboard');
+    console.log(error);
+    //history.push('/dashboard');
   }
 };
 
