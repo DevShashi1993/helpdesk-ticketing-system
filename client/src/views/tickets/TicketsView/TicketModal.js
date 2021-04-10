@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Grid, Typography, makeStyles } from '@material-ui/core';
+import React from 'react';
+import { Grid, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import Bookmark from '@material-ui/icons/Bookmark';
 import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
@@ -55,7 +53,8 @@ const DialogTitle = withStyles(styles)(props => {
   );
 });
 
-const TicketModal = ({ handleClickOpen, handleClose, ticketModalOpen, data }) => {
+const TicketModal = ({ handleClickOpen, handleClose, ticketModalOpen, ticketData }) => {
+  
   const {
     ticketTitle,
     ticketDesc,
@@ -63,9 +62,9 @@ const TicketModal = ({ handleClickOpen, handleClose, ticketModalOpen, data }) =>
     tickePriority,
     tickeStatus,
     tickeDueDate
-  } = data;
+  } = ticketData;
 
-  console.log('modal data: ', data);
+  console.log('modal data: ', ticketData);
 
   return (
     <div style={{ flex: 3 }}>
@@ -84,7 +83,7 @@ const TicketModal = ({ handleClickOpen, handleClose, ticketModalOpen, data }) =>
                 Title:
               </Typography>
               <Typography variant="body2" color="textSecondary" component="p">
-                Test Ticket 10005
+               {ticketTitle}
               </Typography>
             </Grid>
             <Grid item md={12} xs={12}>
@@ -92,8 +91,7 @@ const TicketModal = ({ handleClickOpen, handleClose, ticketModalOpen, data }) =>
                 Description:
               </Typography>
               <Typography variant="body2" color="textSecondary" component="p">
-                Lizards are a widespread group of squamate reptiles, with over
-                6,000 species, ranging across all continents except Antarctica
+                {ticketDesc}
               </Typography>
             </Grid>
             <Grid item md={6} xs={6}>
@@ -101,7 +99,7 @@ const TicketModal = ({ handleClickOpen, handleClose, ticketModalOpen, data }) =>
                 Ticket Type: 
               </Typography>
               <Typography variant="body2" color="textSecondary" component="p">
-                New Feature
+                {tickeType}
               </Typography>
             </Grid>
             <Grid item md={6} xs={6}>
@@ -109,7 +107,7 @@ const TicketModal = ({ handleClickOpen, handleClose, ticketModalOpen, data }) =>
                 Priority:
               </Typography>
               <Typography variant="body2" color="textSecondary" component="p">
-                Medium
+                {tickePriority}
               </Typography>
             </Grid>
             <Grid item md={6} xs={6}>
@@ -117,7 +115,7 @@ const TicketModal = ({ handleClickOpen, handleClose, ticketModalOpen, data }) =>
                 Due Date:
               </Typography>
               <Typography variant="body2" color="textSecondary" component="p">
-                25/04/2021
+                {tickeDueDate}
               </Typography>
             </Grid>
             <Grid item md={6} xs={6}>

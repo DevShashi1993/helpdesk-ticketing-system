@@ -12,7 +12,7 @@ const Tickets = () => {
   const dispatch = useDispatch();
   
   const { allTicketData } = useSelector(state => state.ticketState);
-  console.log("ticketData => ", allTicketData);
+  console.log("allTicketData => ", allTicketData);
   
   const [tableData, setTableData] = useState([]);
   const [skipPageReset, setSkipPageReset] = useState(false)
@@ -111,7 +111,7 @@ const Tickets = () => {
         handleClickOpen={handleClickOpen}
         handleClose={handleClose}
         ticketModalOpen={ticketModalOpen}
-        data={ticketData}
+        ticketData={ticketData}
       />
     </Card>
   );

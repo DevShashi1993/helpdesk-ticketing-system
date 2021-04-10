@@ -6,6 +6,7 @@ import {
   GET_TICKET,
   GET_ERRORS
 } from './types';
+import Ticket from '../../model/Ticket';
 
 export const createNewTicket = ticketData => async (dispatch, getState) => {
   try {
@@ -25,21 +26,23 @@ export const getAllTickets = () => async (dispatch, getState) => {
     console.dir(compId);
     const res = await axios.get('/ticket/all', {
       params: {
-        compId: compId,
-      },
+        compId: compId
+      }
     });
 
     if (res.status === 200) {
       let allTicketData = await res.data;
       allTicketData = allTicketData.map(obj => {
-        return {
-          ticketID: obj.id,
-          ticketTitle: obj.ticket_title,
-          tickeType: obj.ticket_type,
-          tickePriority: obj.ticket_priority,
-          tickeStatus: obj.ticket_status,
-          tickeDueDate: obj.due_date
-        };
+        let ticket = new Ticket(
+          obj.id,
+          obj.ticket_title,
+          obj.ticket_type,
+          obj.ticket_priority,
+          obj.ticket_status,
+          obj.due_date
+        );
+
+        return ticket;
       });
 
       dispatch({
@@ -59,31 +62,41 @@ export const getTicket = id => async (dispatch, getState) => {
   try {
     let compId = getState().authState.user.compId;
     const res = await axios.get(`/ticket`, {
-      params: { id: id,  compId: compId }
+      params: { id: id, compId: compId }
     });
 
     if (res.status === 200) {
-      let ticketData = await res.data;
-      ticketData = ticketData.map(obj => {
-        return {
-          ticketID: obj.id,
-          ticketTitle: obj.ticket_title,
-          ticketDesc: obj.ticket_desc,
-          tickeType: obj.ticket_type,
-          tickePriority: obj.ticket_priority,
-          tickeStatus: obj.ticket_status,
-          tickeDueDate: obj.due_date
-        };
-      });
+      const ticketArr = await res.data;
 
-      return ticketData;
+      if (ticketArr.length == 1) {
+        let ticketData = ticketArr[0];
 
-      // dispatch({
-      //   type: GET_TICKET,
-      //   payload: res.data
-      // });
+        const {
+          id,
+          ticket_title,
+          ticket_desc,
+          ticket_type,
+          ticket_priority,
+          ticket_status,
+          due_date
+        } = ticketData;
+
+        let ticket = new Ticket(id,
+          ticket_title,
+          ticket_desc,
+          ticket_type,
+          ticket_priority,
+          ticket_status,
+          due_date);
+
+        return ticket;
+
+        // dispatch({
+        //   type: GET_TICKET,
+        //   payload: res.data
+        // });
+      }
     }
-    
   } catch (error) {
     console.log(error);
     //history.push('/dashboard');
@@ -100,8 +113,8 @@ export const deleteAllTickets = () => async (dispatch, getState) => {
       let compId = getState().authState.user.compId;
       const res = await axios.delete(`/ticket/deleteall`, {
         params: {
-          compId: compId,
-        },
+          compId: compId
+        }
       });
       res.status === 200 && dispatch(getAllTickets());
     } catch (err) {
@@ -124,7 +137,7 @@ export const deleteTicket = ticketIdArr => async (dispatch, getState) => {
       const res = await axios.delete(`/ticket/delete`, {
         params: {
           IDs: ticketIdArr.reduce((acc, curr) => `${acc},${curr}`),
-          compId: compId,
+          compId: compId
         }
       });
       res.status === 200 && dispatch(getAllTickets());
