@@ -122,9 +122,6 @@ const EnhancedTable = ({
     setPageSize(Number(event.target.value))
   }
 
-  const removeByIndexs = (array, indexs) =>
-    array.filter((_, i) => !indexs.includes(i))
-
   const deleteUserHandler = event => {
     let selectedTicketIds = selectedFlatRows.map(
       data => data.original.ticketID
@@ -136,12 +133,6 @@ const EnhancedTable = ({
       console.log('delete called with IDs => ' + selectedTicketIds);
       dispatch(deleteTicket(selectedTicketIds));
     }
-    
-    // const newData = removeByIndexs(
-    //   data,
-    //   Object.keys(selectedRowIds).map(x => parseInt(x, 10))
-    // )
-    // setData(newData)
   }
   
   // Render the UI for your table

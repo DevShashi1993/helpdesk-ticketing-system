@@ -13,7 +13,7 @@ import GlobalStyles from './components/GlobalStyles';
 import AccountView from './views/account/AccountView';
 import DashboardView from './views/reports/DashboardView';
 import NotFoundView from './views/errors/NotFoundView';
-import ProductListView from './views/product/ProductListView';
+import BookmarkView from './views/BookmarkView';
 import SettingsView from './views/settings/SettingsView';
 import Register from './components/Register/Register';
 import Login from './components//Login/Login';
@@ -100,7 +100,7 @@ const App = () => {
             <Route path="/tickets" element={<TicketsView />} />
             <Route path="/contacts" element={<ContactListView />} />
             <Route path="/account" element={<AccountView />} />
-            <Route path="/bookmarks" element={<ProductListView />} />
+            <Route path="/bookmarks" element={<BookmarkView />} />
             <Route path="/settings" element={<SettingsView />} />
             <Route path="*" element={<NotFoundView />} />
           </Route>

@@ -12,7 +12,7 @@ const Tickets = () => {
   const dispatch = useDispatch();
   
   const { allTicketData } = useSelector(state => state.ticketState);
-  console.log("allTicketData => ", allTicketData);
+  console.log("allTicketData => ", JSON.stringify(allTicketData));
   
   const [tableData, setTableData] = useState([]);
   const [skipPageReset, setSkipPageReset] = useState(false)
@@ -52,7 +52,6 @@ const Tickets = () => {
       {
         Header: 'Type',
         accessor: 'tickeType',
-        
       },
       {
         Header: 'Priority',
@@ -66,8 +65,7 @@ const Tickets = () => {
       },
       {
         Header: 'Status',
-        accessor: 'tickeStatus',
-        
+        accessor: 'tickeStatus', 
       },
     ],
     []

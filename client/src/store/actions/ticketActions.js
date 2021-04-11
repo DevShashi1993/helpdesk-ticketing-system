@@ -36,6 +36,7 @@ export const getAllTickets = () => async (dispatch, getState) => {
         let ticket = new Ticket(
           obj.id,
           obj.ticket_title,
+          "",
           obj.ticket_type,
           obj.ticket_priority,
           obj.ticket_status,

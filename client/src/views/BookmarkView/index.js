@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Box, Container, Grid, makeStyles } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import Toolbar from './Toolbar';
-import ProductCard from './ProductCard';
+import BookmarkCard from './BookmarkCard';
 import data from './data';
 
 const useStyles = makeStyles(theme => ({
@@ -12,23 +12,24 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3)
   },
-  productCard: {
+  bookmarkCard: {
     height: '100%'
   }
 }));
 
-const ProductList = () => {
+const BookmarkView = () => {
   const classes = useStyles();
-  const [products] = useState(data);
+
+  const bookmarkArrData = useMemo(() => data, []);
 
   return (
     <Container  className={classes.root} maxWidth={false}>
       <Toolbar />
       <Box mt={3}>
         <Grid container spacing={3}>
-          {products.map(product => (
-            <Grid item key={product.id} lg={4} md={6} xs={12}>
-              <ProductCard className={classes.productCard} product={product} />
+          {bookmarkArrData.map(eachBookmark => (
+            <Grid item key={eachBookmark.id} lg={4} md={6} xs={12}>
+              <BookmarkCard className={classes.bookmarkCard} data={eachBookmark} />
             </Grid>
           ))}
         </Grid>
@@ -40,4 +41,4 @@ const ProductList = () => {
   );
 };
 
-export default ProductList;
+export default BookmarkView;
