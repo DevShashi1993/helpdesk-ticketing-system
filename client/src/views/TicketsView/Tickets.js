@@ -6,7 +6,7 @@ import {
 import CssBaseline from '@material-ui/core/CssBaseline'
 import EnhancedTable from './EnhancedTable';
 import TicketModal from './TicketModal';
-import { getAllTickets, getTicket } from '../../../store/actions/ticketActions';
+import { getAllTickets, getTicket } from '../../store/actions/ticketActions';
 
 const Tickets = () => {
   const dispatch = useDispatch();

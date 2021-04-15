@@ -19,7 +19,7 @@ import {
   useSortBy,
   useTable,
 } from 'react-table';
-import { deleteAllTickets, deleteTicket } from '../../../store/actions/ticketActions';
+import { deleteAllTickets, deleteTicket } from '../../store/actions/ticketActions';
 
 const IndeterminateCheckbox = React.forwardRef(
   ({ indeterminate, ...rest }, ref) => {

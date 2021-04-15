@@ -10,7 +10,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import {
   getAllTickets,
   createNewTicket
-} from '../../../store/actions/ticketActions';
+} from '../../store/actions/ticketActions';
 
 const ticketType = [
   {

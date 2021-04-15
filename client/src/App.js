@@ -1,5 +1,5 @@
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import jwt_decode from 'jwt-decode';
 import {
@@ -10,17 +10,17 @@ import {
 } from 'react-router-dom';
 import { ThemeProvider, makeStyles } from '@material-ui/core';
 import GlobalStyles from './components/GlobalStyles';
-import AccountView from './views/account/AccountView';
-import DashboardView from './views/reports/DashboardView';
-import NotFoundView from './views/errors/NotFoundView';
+import AccountView from './views/AccountView';
+import DashboardView from './views/DashboardView';
+import NotFoundView from './views/NotFoundView';
 import BookmarkView from './views/BookmarkView';
-import SettingsView from './views/settings/SettingsView';
+import SettingsView from './views/SettingsView';
 import Register from './components/Register/Register';
 import Login from './components//Login/Login';
 import AppLayout from './AppLayout';
 import './mixins/chartjs';
 import theme from './theme';
-import TicketsView from './views/tickets/TicketsView';
+import TicketsView from './views/TicketsView';
 import ContactListView from './views/customer/ContactListView';
 import setJWTToken from './utilities/setJWTToken';
 import { SET_CURRENT_USER } from './store/actions/types';
@@ -28,16 +28,16 @@ import { logout } from './store/actions/authActions';
 
 const jwtToken = localStorage.jwtToken;
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    backgroundColor: theme.palette.background.default,
-    display: 'flex',
-    height: '100%',
-    overflow: 'hidden',
-    width: '100%',
-    paddingTop: '20px'
-  }
-}));
+// const useStyles = makeStyles(theme => ({
+//   root: {
+//     backgroundColor: theme.palette.background.default,
+//     display: 'flex',
+//     height: '100%',
+//     overflow: 'hidden',
+//     width: '100%',
+//     paddingTop: '20px'
+//   }
+// }));
 
 const App = () => {
   // const routing = useRoutes(routes);
